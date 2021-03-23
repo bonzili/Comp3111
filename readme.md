@@ -7,7 +7,7 @@ email: hyliat | github: bonzili | dev branch: bonzi_dev
 Task 2 & Task 5
 
 2. Liu zi jie
-email: zliubz | github: zliubz | dev branch:
+email: zliubz | github: zliubz | dev branch:zliubz-patch-1
 Task 1 & Task 4
 
 3. LEUNG, Wan Sheng
