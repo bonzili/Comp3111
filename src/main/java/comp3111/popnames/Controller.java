@@ -47,7 +47,19 @@ public class Controller {
 
     @FXML
     private Tab tabReport2;
+    
+    @FXML
+    private TextField textfieldYearStart;
+    
+    @FXML
+    private TextField textfieldYearEnd;
+    
+    @FXML
+    private TextField textfieldK;
 
+    @FXML
+    private TextField textfieldGender;
+    
     @FXML
     private ToggleGroup T11;
 
@@ -154,6 +166,20 @@ public class Controller {
     	textAreaConsole.setText(oReport);
     }
     
-
+    /**
+     *  Task Two
+     *  
+     *  
+     */
+    @FXML
+    void doSummaryT2() {
+    	String yearstartstring = textfieldYearStart.getText();
+    	String yearendstring = textfieldYearEnd.getText();
+    	String rankstring = textfieldK.getText();
+    	String gender = textfieldGender.getText();
+    	String oReport = Task2.getSummaryT2(yearstartstring, yearendstring, rankstring, gender);
+    	textAreaConsole.setText(oReport);
+    }
+    
 }
 

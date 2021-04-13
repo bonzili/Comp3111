@@ -63,5 +63,17 @@ public class JavaFXTest extends ApplicationTest {
 		String s = t.getText();
 		assertTrue(s.equals("David"));
 	}
+	
+	@Test
+	public void testTextAreaUpdate() {	
+		clickOn("#tabReport2");
+		clickOn("#buttonSummaryT2");
+		sleep(500);
+		String s1 = t.getText();
+		clickOn("#buttonSummaryT2");
+		sleep(500);
+		String s2 = t.getText();
+		assertTrue(s1.equals(s2));
+	}
 		
 }

@@ -49,13 +49,31 @@
                   </Tab>
                 <Tab fx:id="tabReport2" text="Reporting 2">
                   <content>
-                        <AnchorPane>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="719.0">
                            <children>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="722.0">
-                                 <children>
-                                    <TextArea layoutX="109.0" layoutY="33.0" prefHeight="102.0" prefWidth="383.0" text="Task #2: K-th Popular Names (data reporting)&#10;&#10;Generate a report in response to the queries on the K-th popular names over a given period.&#10;" wrapText="true" />
-                                 </children>
-                              </AnchorPane>
+                              
+                              <Label layoutX="98.0" layoutY="35.0" text="Starting Year:" />
+                              <TextField fx:id="textfieldYearStart" layoutX="185.0" layoutY="32.0" prefHeight="26.0" prefWidth="149.0" text="2001" />
+                              <Label layoutX="342.0" layoutY="35.0" text="Range: 1880 - 2019" />
+                              
+                              <Label layoutX="98.0" layoutY="67.0" prefHeight="18.0" prefWidth="87.0" text="Ending Year" />
+                              <TextField fx:id="textfieldYearEnd" layoutX="185.0" layoutY="64.0" prefHeight="26.0" prefWidth="149.0" text="2005" />
+                              <Label layoutX="342.0" layoutY="67.0" text="Range: 1880 - 2019" />
+                              
+                              <Label layoutX="98.0" layoutY="98.0" text="Rank K" />
+                              <TextField fx:id="textfieldK" layoutX="185.0" layoutY="95.0" text="1" />
+                              <Label layoutX="342.0" layoutY="98.0" text="Range: 1 - 1000" />
+                              
+                              <Label layoutX="98.0" layoutY="129.0" text="Gender" />
+                              <TextField fx:id="textfieldGender" layoutX="185.0" layoutY="126.0" text="M" />
+                              <Label layoutX="342.0" layoutY="129.0" text="Value: M or F" />
+                              
+                             <Label layoutX="98.0" layoutY="169.0" text="REPORT" />
+                              <Button fx:id="buttonSummaryT2" layoutX="185.0" layoutY="169.0" mnemonicParsing="false" onAction="#doSummaryT2" text="Summary" />
+                              <Button fx:id="buttonDataTable" layoutX="271.0" layoutY="169.0" mnemonicParsing="false" onAction="#doSummary" text="Result (Data table)" />
+                              <Button fx:id="buttonBarChart" layoutX="400.0" layoutY="169.0" mnemonicParsing="false" onAction="#doSummary" text="Result (Bar Chart)" />
+                              <Button fx:id="buttonPieChart" layoutX="530.0" layoutY="169.0" mnemonicParsing="false" onAction="#doSummary" text="Result (Pie Chart)" />
+                              
                            </children>
                         </AnchorPane>
                   </content>
