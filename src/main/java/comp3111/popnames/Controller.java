@@ -9,6 +9,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ComboBox;
 
 public class Controller {
 
@@ -81,6 +82,9 @@ public class Controller {
     @FXML
     private TextArea textAreaConsole;
     
+    @FXML
+    private ComboBox<String> comboboxGender;
+ 
 
     /**
      *  Task Zero
@@ -176,10 +180,54 @@ public class Controller {
     	String yearstartstring = textfieldYearStart.getText();
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
-    	String gender = textfieldGender.getText();
+    	String gender = comboboxGender.getValue();
     	String oReport = Task2.getSummaryT2(yearstartstring, yearendstring, rankstring, gender);
     	textAreaConsole.setText(oReport);
     }
     
+    /**
+     *  Task Two
+     *  
+     *  
+     */
+    @FXML
+    void doDataTableT2() {
+    	String yearstartstring = textfieldYearStart.getText();
+    	String yearendstring = textfieldYearEnd.getText();
+    	String rankstring = textfieldK.getText();
+    	String gender = textfieldGender.getText();
+    	String oReport = Task2.getDataTableT2(yearstartstring, yearendstring, rankstring, gender);
+    	textAreaConsole.setText(oReport);
+    }
+    
+    /**
+     *  Task Two
+     *  
+     *  
+     */
+    @FXML
+    void doBarChartT2() {
+    	String yearstartstring = textfieldYearStart.getText();
+    	String yearendstring = textfieldYearEnd.getText();
+    	String rankstring = textfieldK.getText();
+    	String gender = textfieldGender.getText();
+    	String oReport = Task2.getBarChartT2(yearstartstring, yearendstring, rankstring, gender);
+    	textAreaConsole.setText(oReport);
+    }
+    
+    /**
+     *  Task Two
+     *  
+     *  
+     */
+    @FXML
+    void doPieChartT2() {
+    	String yearstartstring = textfieldYearStart.getText();
+    	String yearendstring = textfieldYearEnd.getText();
+    	String rankstring = textfieldK.getText();
+    	String gender = textfieldGender.getText();
+    	String oReport = Task2.getPieChartT2(yearstartstring, yearendstring, rankstring, gender);
+    	textAreaConsole.setText(oReport);
+    }
 }
 
