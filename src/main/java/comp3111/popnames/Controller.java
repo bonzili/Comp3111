@@ -195,7 +195,7 @@ public class Controller {
     	String yearstartstring = textfieldYearStart.getText();
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
-    	String gender = textfieldGender.getText();
+        String gender = comboboxGender.getValue();
     	String oReport = Task2.getDataTableT2(yearstartstring, yearendstring, rankstring, gender);
     	textAreaConsole.setText(oReport);
     }
@@ -210,7 +210,7 @@ public class Controller {
     	String yearstartstring = textfieldYearStart.getText();
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
-    	String gender = textfieldGender.getText();
+        String gender = comboboxGender.getValue();
     	String oReport = Task2.getBarChartT2(yearstartstring, yearendstring, rankstring, gender);
     	textAreaConsole.setText(oReport);
     }
@@ -225,7 +225,7 @@ public class Controller {
     	String yearstartstring = textfieldYearStart.getText();
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
-    	String gender = textfieldGender.getText();
+        String gender = comboboxGender.getValue();
     	String oReport = Task2.getPieChartT2(yearstartstring, yearendstring, rankstring, gender);
     	textAreaConsole.setText(oReport);
     }

@@ -48,11 +48,11 @@
                            <children>
                               
                               <Label layoutX="98.0" layoutY="35.0" text="Starting Year:" />
-                              <TextField fx:id="textfieldYearStart" layoutX="185.0" layoutY="32.0" prefHeight="26.0" prefWidth="149.0" text="2001" />
+                              <TextField fx:id="textfieldYearStart" layoutX="185.0" layoutY="32.0" prefHeight="26.0" prefWidth="149.0" text="1880" />
                               <Label layoutX="342.0" layoutY="35.0" text="Range: 1880 - 2019" />
                               
                               <Label layoutX="98.0" layoutY="67.0" prefHeight="18.0" prefWidth="87.0" text="Ending Year" />
-                              <TextField fx:id="textfieldYearEnd" layoutX="185.0" layoutY="64.0" prefHeight="26.0" prefWidth="149.0" text="2005" />
+                              <TextField fx:id="textfieldYearEnd" layoutX="185.0" layoutY="64.0" prefHeight="26.0" prefWidth="149.0" text="1885" />
                               <Label layoutX="342.0" layoutY="67.0" text="Range: 1880 - 2019" />
                               
                               <Label layoutX="98.0" layoutY="98.0" text="Rank K" />
@@ -68,7 +68,7 @@
         							</FXCollections>
      							</items>
      							<value>
-        							<String fx:value="M" />
+        							<String fx:value="F" />
     							</value>
                               </ComboBox>
                               <Label layoutX="342.0" layoutY="129.0" text="Value: M or F" />

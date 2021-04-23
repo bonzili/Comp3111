@@ -1,8 +1,61 @@
 package comp3111.popnames;
 
+import java.io.*;
+import java.util.*;
 import org.apache.commons.csv.*;
 import edu.duke.*;
 import javax.swing.JOptionPane;
+
+
+class SortedPeopleList {
+	public int totaloccurrence;
+	public int totalfreq;
+	public int unipeople;
+	public People[] sortedpeoplelist;
+
+	public SortedPeopleList(){
+		this.totaloccurrence = 0;
+		this.totalfreq = 0;
+		this.unipeople = 0;
+	}
+}
+
+class People{
+	public String name;
+	public int rank;
+	public int occurrence;
+	public int freq;
+
+	public People(String name, int rank, int occurrence) {
+		this.name = name;
+		this.rank = rank;
+		this.occurrence = occurrence;
+		this.freq = 1;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setOccurrence(int occurrence) {
+		this.occurrence = occurrence;
+	}
+
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
+	public static int compareOccurrence(People a , People b)
+	{
+		if(a.occurrence < b.occurrence)
+			return 1;    //swap b before a
+		else if (a.occurrence == b.occurrence)
+			return a.name.compareTo(b.name); //check name instead
+		return -1 ;
+		//return b.occurrence - a.occurrence;
+		//return a.name.compareTo(b.name);
+	}
+}
 
 public class Task2 {
 
@@ -61,7 +114,75 @@ public class Task2 {
 		}
 		return valid;
 	}
-	
+
+	public static People getPeople(int year, int rank, String gender) {
+		boolean found = false;
+		People people= new People("",0,0);
+		int currentRank = 0;
+
+		// For every name entry in the CSV file
+		for (CSVRecord rec : getFileParser(year)) {
+			// Get its rank if gender matches param
+			if (rec.get(1).equals(gender)) {
+				// Get the name whose rank matches param
+				currentRank++;
+				if (currentRank == rank) {
+					found = true;
+					people.setName(rec.get(0));
+					people.setRank(currentRank);
+					people.setOccurrence(Integer.parseInt(rec.get(2)));
+					break;
+				}
+			}
+		}
+		if (found)
+			return people;
+		else
+			popupMessage("input","No name can be found in rank "+ rank + " in year " + year + ".");
+			return null;
+	}
+
+	public static SortedPeopleList sortPeople(People[] peoplelist){
+		SortedPeopleList result = new SortedPeopleList();
+		result.totalfreq = peoplelist.length;
+		People[] templist = new People[peoplelist.length];
+		Set<String> listname = new HashSet<>();
+		for (int i = 0; i < peoplelist.length; i++){
+			if (!listname.contains(peoplelist[i].name)){
+				templist[result.unipeople] = peoplelist[i];
+				listname.add(peoplelist[i].name);
+				result.unipeople ++;
+			}else{
+				for (int k = 0; k < result.unipeople; k++){
+					if (templist[k].name.equals(peoplelist[i].name)){
+						templist[k].occurrence += peoplelist[i].occurrence;
+						templist[k].freq += 1;
+					}
+				}
+			}
+			result.totaloccurrence += peoplelist[i].occurrence;
+		}
+		People[] realArray = new People[result.unipeople];
+		System.arraycopy(templist, 0, realArray, 0, result.unipeople);
+		result.sortedpeoplelist = realArray;
+		Arrays.sort(result.sortedpeoplelist, People::compareOccurrence);
+		return result;
+	}
+
+	public static SortedPeopleList generateOutput(int yearstart, int yearend, int k, String gender){
+		People[] peoplelist = new People[yearend-yearstart+1];
+		for (int i = 0; i < yearend-yearstart+1 ;i++){
+			People temp = getPeople(yearstart+i,k,gender);
+			if (temp != null){
+				peoplelist[i] = temp;
+			}
+		}
+		SortedPeopleList output = sortPeople(peoplelist);
+		return output;
+	}
+
+
+
 	public static String getDataTableT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		 String oReport = "Success";
 		 return oReport;
@@ -79,9 +200,15 @@ public class Task2 {
 	 public static String getSummaryT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		 String oReport = "";
 		 if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {
-			 oReport = gender;
+		 	int yearstart = Integer.parseInt(yearstartstring);
+		 	int yearend = Integer.parseInt(yearendstring);
+		 	int k = Integer.parseInt(kstring);
+		 	SortedPeopleList temp = generateOutput(yearstart,yearend,k,gender);
+		 	for (int i = 0; i < temp.unipeople; i++){
+		 		oReport = oReport + temp.sortedpeoplelist[i].name + ":" + temp.sortedpeoplelist[i].occurrence + ":" + temp.sortedpeoplelist[i].freq + "\n" ;
+			}
+		 	oReport += temp.unipeople + "/" + temp.totalfreq + "/" + temp.totaloccurrence;
 		 }
-		 
 		 return oReport;
 	 }
  
