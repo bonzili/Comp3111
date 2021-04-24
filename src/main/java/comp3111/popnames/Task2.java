@@ -198,13 +198,53 @@ public class Task2 {
 
 
 	public static String getDataTableT2(String yearstartstring, String yearendstring, String kstring, String gender) {
-		 String oReport = "Success";
+		String oReport = "";
+		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {
+			int yearstart = Integer.parseInt(yearstartstring);
+			int yearend = Integer.parseInt(yearendstring);
+			int k = Integer.parseInt(kstring);
+			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);
+		}
 		 return oReport;
 	 }
 	
 	public static String getBarChartT2(String yearstartstring, String yearendstring, String kstring, String gender) {
-		 String oReport = "Success";
-		 return oReport;
+		String oReport = "";
+		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {
+			int yearstart = Integer.parseInt(yearstartstring);
+			int yearend = Integer.parseInt(yearendstring);
+			int k = Integer.parseInt(kstring);
+			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);
+
+			Stage stage = new Stage();
+			stage.setTitle("Bar Chart");
+			final CategoryAxis xAxis = new CategoryAxis();
+			final NumberAxis yAxis = new NumberAxis();
+			final BarChart<String, Number> bc =
+					new BarChart<String, Number>(xAxis, yAxis);
+			bc.setTitle(kstring + "-th Popular Names between " + yearstartstring + " to " + yearendstring);
+			xAxis.setLabel("Name");
+			yAxis.setLabel("Occurrences");
+			XYChart.Series series1 = new XYChart.Series();
+			series1.setName(yearstartstring + " to " + yearendstring);
+			for (People ppl : result.sortedpeoplelist) {
+				series1.getData().add(new XYChart.Data(ppl.name, ppl.occurrence));
+			}
+
+			//for better UI
+			if (result.unipeople == 1){
+				bc.setCategoryGap(500);
+			} else if(result.unipeople == 2){
+				bc.setCategoryGap(150);
+			}
+
+			Scene scene = new Scene(bc, 800, 600);
+			bc.getData().addAll(series1);
+			stage.setScene(scene);
+			stage.show();
+			oReport = "Success";
+		}
+		return oReport;
 	 }
 	public static String getPieChartT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		String oReport = "";
