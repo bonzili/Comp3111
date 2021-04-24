@@ -4,6 +4,7 @@
 <?import javafx.collections.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <VBox prefHeight="679.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.popnames.Controller">
   <children>
@@ -78,8 +79,6 @@
                               <Button fx:id="buttonDataTable" layoutX="271.0" layoutY="169.0" mnemonicParsing="false" onAction="#doDataTableT2" text="Result (Data table)" />
                               <Button fx:id="buttonBarChart" layoutX="400.0" layoutY="169.0" mnemonicParsing="false" onAction="#doBarChartT2" text="Result (Bar Chart)" />
                               <Button fx:id="buttonPieChart" layoutX="530.0" layoutY="169.0" mnemonicParsing="false" onAction="#doPieChartT2" text="Result (Pie Chart)" />
-                              
-                              
                            </children>
                         </AnchorPane>
                   </content>

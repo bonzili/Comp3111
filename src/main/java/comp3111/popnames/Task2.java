@@ -3,6 +3,8 @@ package comp3111.popnames;
 import java.io.*;
 import java.util.*;
 import org.apache.commons.csv.*;
+import org.apache.xalan.xsltc.compiler.util.ResultTreeType;
+
 import edu.duke.*;
 import javax.swing.JOptionPane;
 
@@ -194,6 +196,7 @@ public class Task2 {
 	 }
 	public static String getPieChartT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		 String oReport = "Success";
+		 
 		 return oReport;
 	 }
 	
@@ -203,11 +206,17 @@ public class Task2 {
 		 	int yearstart = Integer.parseInt(yearstartstring);
 		 	int yearend = Integer.parseInt(yearendstring);
 		 	int k = Integer.parseInt(kstring);
-		 	SortedPeopleList temp = generateOutput(yearstart,yearend,k,gender);
-		 	for (int i = 0; i < temp.unipeople; i++){
-		 		oReport = oReport + temp.sortedpeoplelist[i].name + ":" + temp.sortedpeoplelist[i].occurrence + ":" + temp.sortedpeoplelist[i].freq + "\n" ;
-			}
-		 	oReport += temp.unipeople + "/" + temp.totalfreq + "/" + temp.totaloccurrence;
+		 	SortedPeopleList result = generateOutput(yearstart,yearend,k,gender);
+			People toppeople = result.sortedpeoplelist[0];
+			oReport = toppeople.name + " has hold the " + kstring + "-th rank most often for a total of " + toppeople.freq + " timesamong names registered for baby " + "girls" + " born in the period from " + yearstartstring + " to " + yearendstring + ".\n";
+			oReport += "The total number of occurrences of " + toppeople.name + " is " + toppeople.occurrence + ", which represents " + (double)toppeople.occurrence/result.totaloccurrence * 100 + "% of total " + "female" + " births at the " + kstring + "-th rank in the period from " + yearstartstring + " to " + yearendstring + ".";
+			
+			 //Jessica has hold the 8-th rank most often for a total of 4 timesamong names registered for baby girls born in the period from 2000 to 2010.
+			 //The total number of occurrences of Jessica is 1592, which represents 36.4% of total female births at the 8-th rank in the period from 2000 to 2010.
+		 	// for (int i = 0; i < result.unipeople; i++){
+		 	// 	oReport = oReport + result.sortedpeoplelist[i].name + ":" + result.sortedpeoplelist[i].occurrence + ":" + result.sortedpeoplelist[i].freq + "\n" ;
+			// }
+		 	// oReport += result.unipeople + "/" + result.totalfreq + "/" + result.totaloccurrence;
 		 }
 		 return oReport;
 	 }

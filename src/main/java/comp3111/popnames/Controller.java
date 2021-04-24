@@ -85,7 +85,7 @@ public class Controller {
     @FXML
     private ComboBox<String> comboboxGender;
  
-
+    
     /**
      *  Task Zero
      *  To be triggered by the "Summary" button on the Task Zero Tab 
@@ -183,6 +183,7 @@ public class Controller {
     	String gender = comboboxGender.getValue();
     	String oReport = Task2.getSummaryT2(yearstartstring, yearendstring, rankstring, gender);
     	textAreaConsole.setText(oReport);
+        textAreaConsole.setEditable(false);
     }
     
     /**
@@ -198,6 +199,7 @@ public class Controller {
         String gender = comboboxGender.getValue();
     	String oReport = Task2.getDataTableT2(yearstartstring, yearendstring, rankstring, gender);
     	textAreaConsole.setText(oReport);
+        textAreaConsole.setEditable(false);
     }
     
     /**
@@ -213,6 +215,7 @@ public class Controller {
         String gender = comboboxGender.getValue();
     	String oReport = Task2.getBarChartT2(yearstartstring, yearendstring, rankstring, gender);
     	textAreaConsole.setText(oReport);
+        textAreaConsole.setEditable(false);
     }
     
     /**
@@ -222,12 +225,14 @@ public class Controller {
      */
     @FXML
     void doPieChartT2() {
+        test.main();
     	String yearstartstring = textfieldYearStart.getText();
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
         String gender = comboboxGender.getValue();
     	String oReport = Task2.getPieChartT2(yearstartstring, yearendstring, rankstring, gender);
     	textAreaConsole.setText(oReport);
+        textAreaConsole.setEditable(false);
     }
 }
 
