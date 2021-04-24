@@ -2,9 +2,21 @@ package comp3111.popnames;
 
 import java.io.*;
 import java.util.*;
+
+import javafx.scene.text.TextAlignment;
 import org.apache.commons.csv.*;
 import org.apache.xalan.xsltc.compiler.util.ResultTreeType;
-
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.scene.chart.*;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import edu.duke.*;
 import javax.swing.JOptionPane;
 
@@ -195,8 +207,54 @@ public class Task2 {
 		 return oReport;
 	 }
 	public static String getPieChartT2(String yearstartstring, String yearendstring, String kstring, String gender) {
-		 String oReport = "Success";
-		 
+		String oReport = "";
+		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {
+			int yearstart = Integer.parseInt(yearstartstring);
+			int yearend = Integer.parseInt(yearendstring);
+			int k = Integer.parseInt(kstring);
+			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);
+
+			Stage stage = new Stage();
+			Scene scene = new Scene(new Group());
+			stage.setTitle("Pie Chart");
+			stage.setWidth(500);
+			stage.setHeight(500);
+
+			ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+			for (People ppl : result.sortedpeoplelist) {
+				pieChartData.add(new PieChart.Data(ppl.name,ppl.occurrence));
+			}
+
+			final PieChart chart = new PieChart(pieChartData);
+			chart.setTitle(kstring + "-th Popular Names between " + yearstartstring + " to " + yearendstring);
+			final Label caption = new Label("");
+			caption.setTextFill(Color.DARKORANGE);
+			caption.setStyle("-fx-font: 24 arial;");
+
+			for (final PieChart.Data data : chart.getData()) {
+				data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,
+						new EventHandler<MouseEvent>() {
+							@Override public void handle(MouseEvent e) {
+								caption.setTranslateX(e.getSceneX());
+								caption.setTranslateY(e.getSceneY());
+								caption.setText(String.format("%.2f",(double)data.getPieValue()/result.totaloccurrence*100)
+										+ "%");
+							}
+						});
+			}
+			Label reminder = new Label("*You can click on the corresponding slice of the pie chart \n and the value will be displayed.(Rounded down to 2 d.p.)*");
+			reminder.setTextFill(Color.GRAY);
+			reminder.setStyle("-fx-font: 16 arial;");
+			reminder.setTranslateX(20);
+			reminder.setTranslateY(400);
+
+			((Group) scene.getRoot()).getChildren().addAll(chart, caption,reminder);
+			stage.setScene(scene);
+			stage.show();
+
+			oReport = "This illustration shows a chart in the shape of a normal pie. It contains five slices of different sizes.";
+
+		}
 		 return oReport;
 	 }
 	
@@ -209,7 +267,7 @@ public class Task2 {
 		 	SortedPeopleList result = generateOutput(yearstart,yearend,k,gender);
 			People toppeople = result.sortedpeoplelist[0];
 			oReport = toppeople.name + " has hold the " + kstring + "-th rank most often for a total of " + toppeople.freq + " timesamong names registered for baby " + "girls" + " born in the period from " + yearstartstring + " to " + yearendstring + ".\n";
-			oReport += "The total number of occurrences of " + toppeople.name + " is " + toppeople.occurrence + ", which represents " + (double)toppeople.occurrence/result.totaloccurrence * 100 + "% of total " + "female" + " births at the " + kstring + "-th rank in the period from " + yearstartstring + " to " + yearendstring + ".";
+			oReport += "The total number of occurrences of " + toppeople.name + " is " + toppeople.occurrence + ", which represents " + String.format("%.2f",(double)toppeople.occurrence/result.totaloccurrence * 100) + "% of total " + "female" + " births at the " + kstring + "-th rank in the period from " + yearstartstring + " to " + yearendstring + ".";
 			
 			 //Jessica has hold the 8-th rank most often for a total of 4 timesamong names registered for baby girls born in the period from 2000 to 2010.
 			 //The total number of occurrences of Jessica is 1592, which represents 36.4% of total female births at the 8-th rank in the period from 2000 to 2010.

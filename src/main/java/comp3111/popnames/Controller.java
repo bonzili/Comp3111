@@ -225,7 +225,6 @@ public class Controller {
      */
     @FXML
     void doPieChartT2() {
-        test.main();
     	String yearstartstring = textfieldYearStart.getText();
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
