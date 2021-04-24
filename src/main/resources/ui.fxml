@@ -5,13 +5,16 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="679.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp3111.popnames.Controller">
   <children>
@@ -55,20 +58,20 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="221.0" prefWidth="719.0">
                            <children>
                               
-                              <Label layoutX="98.0" layoutY="35.0" text="Starting Year:" />
-                              <TextField fx:id="textfieldYearStart" layoutX="185.0" layoutY="32.0" prefHeight="26.0" prefWidth="149.0" text="1880" />
-                              <Label layoutX="342.0" layoutY="35.0" text="Range: 1880 - 2019" />
+                              <Label layoutX="102.0" layoutY="65.0" text="Starting Year" />
+                              <TextField fx:id="textfieldYearStart" layoutX="189.0" layoutY="62.0" prefHeight="26.0" prefWidth="149.0" text="1880" />
+                              <Label layoutX="346.0" layoutY="65.0" text="Range: 1880 - 2019" />
                               
-                              <Label layoutX="98.0" layoutY="67.0" prefHeight="18.0" prefWidth="87.0" text="Ending Year" />
-                              <TextField fx:id="textfieldYearEnd" layoutX="185.0" layoutY="64.0" prefHeight="26.0" prefWidth="149.0" text="1885" />
-                              <Label layoutX="342.0" layoutY="67.0" text="Range: 1880 - 2019" />
+                              <Label layoutX="102.0" layoutY="97.0" prefHeight="18.0" prefWidth="87.0" text="Ending Year" />
+                              <TextField fx:id="textfieldYearEnd" layoutX="189.0" layoutY="94.0" prefHeight="26.0" prefWidth="149.0" text="1885" />
+                              <Label layoutX="346.0" layoutY="97.0" text="Range: 1880 - 2019" />
                               
-                              <Label layoutX="98.0" layoutY="98.0" text="Rank K" />
-                              <TextField fx:id="textfieldK" layoutX="185.0" layoutY="95.0" text="1" />
-                              <Label layoutX="342.0" layoutY="98.0" text="Range: 1 - 1000" />
+                              <Label layoutX="102.0" layoutY="128.0" text="Rank K" />
+                              <TextField fx:id="textfieldK" layoutX="189.0" layoutY="125.0" text="1" />
+                              <Label layoutX="346.0" layoutY="128.0" text="Range: 1 - 1000" />
                               
-                              <Label layoutX="98.0" layoutY="129.0" text="Gender" />
-                              <ComboBox fx:id="comboboxGender" layoutX="185.0" layoutY="126.0" prefWidth="149.0" promptText="choose">
+                              <Label layoutX="102.0" layoutY="159.0" text="Gender" />
+                              <ComboBox fx:id="comboboxGender" layoutX="189.0" layoutY="156.0" prefWidth="149.0" promptText="choose">
                               	<items>
         							<FXCollections fx:factory="observableArrayList">
           								<String fx:value="M" />
@@ -79,13 +82,18 @@
         							<String fx:value="F" />
     							</value>
                               </ComboBox>
-                              <Label layoutX="342.0" layoutY="129.0" text="Value: M or F" />
+                              <Label layoutX="346.0" layoutY="159.0" text="Value: M or F" />
                               
-                             <Label layoutX="98.0" layoutY="169.0" text="REPORT" />
-                              <Button fx:id="buttonSummaryT2" layoutX="185.0" layoutY="169.0" mnemonicParsing="false" onAction="#doSummaryT2" text="Summary" />
-                              <Button fx:id="buttonDataTable" layoutX="271.0" layoutY="169.0" mnemonicParsing="false" onAction="#doDataTableT2" text="Result (Data table)" />
-                              <Button fx:id="buttonBarChart" layoutX="400.0" layoutY="169.0" mnemonicParsing="false" onAction="#doBarChartT2" text="Result (Bar Chart)" />
-                              <Button fx:id="buttonPieChart" layoutX="530.0" layoutY="169.0" mnemonicParsing="false" onAction="#doPieChartT2" text="Result (Pie Chart)" />
+                             <Label layoutX="102.0" layoutY="199.0" text="REPORT" />
+                              <Button fx:id="buttonSummaryT2" layoutX="189.0" layoutY="199.0" mnemonicParsing="false" onAction="#doSummaryT2" text="Summary" />
+                              <Button fx:id="buttonDataTable" layoutX="275.0" layoutY="199.0" mnemonicParsing="false" onAction="#doDataTableT2" text="Result (Data table)" />
+                              <Button fx:id="buttonBarChart" layoutX="404.0" layoutY="199.0" mnemonicParsing="false" onAction="#doBarChartT2" text="Result (Bar Chart)" />
+                              <Button fx:id="buttonPieChart" layoutX="534.0" layoutY="199.0" mnemonicParsing="false" onAction="#doPieChartT2" text="Result (Pie Chart)" />
+                              <Label layoutX="241.0" layoutY="14.0" text="K-th Popular Names" textAlignment="CENTER" textFill="#4438a1">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
                   </content>
@@ -116,7 +124,51 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea layoutX="40.0" layoutY="27.0" prefHeight="115.0" prefWidth="509.0" text="Task #5: Prediction on Names for Compatible Pairs (application)&#10;&#10;Develop and implement an online service using empirical data to help make informed decisions on predicting names for compatible pairs&#10;" wrapText="true" />
+                              <Label layoutX="438.0" layoutY="151.0" prefHeight="17.0" prefWidth="80.0" text="Preferred Age" />
+                              <Label layoutX="17.0" layoutY="195.0" prefHeight="18.0" prefWidth="72.0" text="Year of Birth" />
+                              <TextField fx:id="textfieldYearEnd1" layoutX="89.0" layoutY="119.0" prefHeight="26.0" prefWidth="149.0" text="1885" />
+                              <Label layoutX="43.0" layoutY="121.0" text="Name" />
+                              <Label layoutX="325.0" layoutY="217.0" text="Algorithm" />
+                              <TextField fx:id="textfieldK1" layoutX="89.0" layoutY="192.0" text="1" />
+                              <Label layoutX="248.0" layoutY="196.0" text="Range: 1 - 1000" />
+                              <Label layoutX="427.0" layoutY="115.0" text="Preferred Gender" />
+                              <ComboBox fx:id="comboboxGender1" layoutX="524.0" layoutY="112.0" prefWidth="149.0" promptText="choose" value="F">
+                                 <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                       <String fx:value="M" />
+                                       <String fx:value="F" />
+                                    </FXCollections>
+                                 </items>
+                              </ComboBox>
+                              <Label layoutX="509.0" layoutY="86.0" text="Your soulmate" />
+                              <Label layoutX="115.0" layoutY="86.0" text="You" />
+                              <Button fx:id="buttonSummaryT21" layoutX="290.0" layoutY="282.0" mnemonicParsing="false" onAction="#doSummaryT2" text="Find Your Soulmate!" textAlignment="CENTER" />
+                              <RadioButton layoutX="360.0" layoutY="242.0" mnemonicParsing="false" text="T5X2">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="algo" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton layoutX="300.0" layoutY="242.0" mnemonicParsing="false" text="T5X1" toggleGroup="$algo" />
+                              <RadioButton layoutX="524.0" layoutY="151.0" mnemonicParsing="false" text="Younger">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="age" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton layoutX="599.0" layoutY="151.0" mnemonicParsing="false" text="Older" toggleGroup="$age" />
+                              <Label layoutX="218.0" layoutY="14.0" text="Where's your soulmate?" textAlignment="CENTER" textFill="#4438a1">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="43.0" layoutY="160.0" text="Gender" />
+                              <ComboBox fx:id="comboboxGender11" layoutX="89.0" layoutY="156.0" prefWidth="149.0" promptText="choose" value="F">
+                                 <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                       <String fx:value="M" />
+                                       <String fx:value="F" />
+                                    </FXCollections>
+                                 </items>
+                              </ComboBox>
                            </children>
                         </AnchorPane>
                     </content>

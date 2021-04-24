@@ -1,12 +1,10 @@
 package comp3111.popnames;
 
-import java.io.*;
 import java.util.*;
 
-import javafx.scene.text.TextAlignment;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.commons.csv.*;
-import org.apache.xalan.xsltc.compiler.util.ResultTreeType;
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -16,6 +14,11 @@ import javafx.stage.Stage;
 import javafx.scene.chart.*;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import edu.duke.*;
 import javax.swing.JOptionPane;
@@ -72,6 +75,24 @@ class People{
 }
 
 public class Task2 {
+
+	public static String ordinalConversion(int Cardinal){
+		String result = "";
+		switch(Cardinal) {
+			case 1:
+				result = "1-st";
+				break;
+			case 2:
+				result = "2-nd";
+				break;
+			case 3:
+				result = "3-rd";
+				break;
+			default:
+				result = Cardinal + "-th";
+		}
+		return result;
+	}
 
 	public static CSVParser getFileParser(int year) {
      FileResource fr = new FileResource(String.format("dataset/yob%s.csv", year));
@@ -195,7 +216,54 @@ public class Task2 {
 		return output;
 	}
 
+	public static class Person {
 
+		public final SimpleStringProperty Name;
+		public final SimpleStringProperty Freq;
+		public final SimpleStringProperty Occurrences;
+		public final SimpleStringProperty Percentage;
+
+
+		public Person(String Name, int freq, int occurrences, String percentage) {
+			this.Name = new SimpleStringProperty(Name);
+			this.Freq = new SimpleStringProperty(String.valueOf(freq));
+			this.Occurrences = new SimpleStringProperty(String.valueOf(occurrences));
+			this.Percentage = new SimpleStringProperty(percentage+"%");
+		}
+
+		public String getName() {
+			return Name.get();
+		}
+
+		public void setName(String Name) {
+			this.Name.set(Name);
+		}
+
+		public String getFreq() {
+			return Freq.get();
+		}
+
+		public void setFreq(String frequency) {
+			this.Freq.set(frequency);
+		}
+
+		public String getOccurrences() {
+			return Occurrences.get();
+		}
+
+		public void setOccurrences(String Occurrences) {
+			this.Occurrences.set(Occurrences);
+		}
+
+		public String getPercentage() {
+			return Percentage.get();
+		}
+
+		public void setPercentage(String percentage) {
+			this.Percentage.set(percentage);
+		}
+
+	}
 
 	public static String getDataTableT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		String oReport = "";
@@ -204,6 +272,79 @@ public class Task2 {
 			int yearend = Integer.parseInt(yearendstring);
 			int k = Integer.parseInt(kstring);
 			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);
+
+			TableView<Person> table = new TableView<Person>();
+
+			ObservableList<Person> data = FXCollections.observableArrayList();
+			for (People ppl : result.sortedpeoplelist) {
+				data.add(new Person(ppl.name, ppl.freq, ppl.occurrence, String.format("%.1f",(double)ppl.occurrence/result.totaloccurrence * 100 )));
+			}
+
+			Stage stage = new Stage();
+			Scene scene = new Scene(new Group());
+			stage.setTitle("Data table");
+			stage.setWidth(450);
+			stage.setHeight(520);
+
+			final Label label = new Label(ordinalConversion(k) + " Popular Names between " + yearstartstring + " to " + yearendstring);
+			label.setFont(new Font("Arial", 20));
+
+			table.setEditable(false);
+
+			TableColumn NameCol = new TableColumn("Name");
+			NameCol.setMinWidth(100);
+			NameCol.setStyle( "-fx-alignment: CENTER;");
+			NameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("Name"));
+
+			TableColumn FreqCol = new TableColumn("Frequency");
+			FreqCol.setMinWidth(100);
+			FreqCol.setStyle( "-fx-alignment: CENTER;");
+			FreqCol.setCellValueFactory(new PropertyValueFactory<Person, String>("Freq"));
+
+			TableColumn OccurCol = new TableColumn("Occurrences");
+			OccurCol.setMinWidth(100);
+			OccurCol.setStyle( "-fx-alignment: CENTER;");
+			OccurCol.setCellValueFactory(new PropertyValueFactory<Person, String>("Occurrences"));
+
+			TableColumn PercentCol = new TableColumn("Percentage");
+			PercentCol.setMinWidth(100);
+			PercentCol.setStyle( "-fx-alignment: CENTER;");
+			PercentCol.setCellValueFactory(new PropertyValueFactory<Person, String>("Percentage"));
+
+			table.setItems(data);
+			table.getColumns().addAll(NameCol,FreqCol,OccurCol,PercentCol);
+
+			final VBox vbox = new VBox();
+			vbox.setSpacing(5);
+			vbox.setPadding(new Insets(10, 0, 0, 10));
+
+			final Label total = new Label("Total:");
+			total.setFont(new Font("Arial", 20));
+			total.setTranslateX(35);
+			total.setTranslateY(440);
+
+			Label totalfreq = new Label(String.valueOf(result.totalfreq));
+			totalfreq.setFont(new Font("Arial", 20));
+			totalfreq.setTranslateX(155);
+			totalfreq.setTranslateY(440);
+
+			Label totaloccur = new Label(String.valueOf(result.totaloccurrence));
+			totaloccur.setFont(new Font("Arial", 20));
+			totaloccur.setTranslateX(220);
+			totaloccur.setTranslateY(440);
+
+			Label totalpercent = new Label("100.0%");
+			totalpercent.setFont(new Font("Arial", 20));
+			totalpercent.setTranslateX(330);
+			totalpercent.setTranslateY(440);
+
+			vbox.getChildren().addAll(label, table);
+
+			((Group) scene.getRoot()).getChildren().addAll(vbox,total,totalfreq,totaloccur,totalpercent);
+
+			stage.setScene(scene);
+			stage.show();
+
 		}
 		 return oReport;
 	 }
@@ -222,24 +363,50 @@ public class Task2 {
 			final NumberAxis yAxis = new NumberAxis();
 			final BarChart<String, Number> bc =
 					new BarChart<String, Number>(xAxis, yAxis);
-			bc.setTitle(kstring + "-th Popular Names between " + yearstartstring + " to " + yearendstring);
+			bc.setTitle(ordinalConversion(k) + " Popular Names between " + yearstartstring + " to " + yearendstring);
 			xAxis.setLabel("Name");
 			yAxis.setLabel("Occurrences");
 			XYChart.Series series1 = new XYChart.Series();
 			series1.setName(yearstartstring + " to " + yearendstring);
+
+			final Label caption = new Label("");
+			caption.setTextFill(Color.BLACK);
+			caption.setStyle("-fx-font: 24 arial;");
 			for (People ppl : result.sortedpeoplelist) {
 				series1.getData().add(new XYChart.Data(ppl.name, ppl.occurrence));
 			}
 
 			//for better UI
 			if (result.unipeople == 1){
-				bc.setCategoryGap(500);
+				bc.setCategoryGap(300);
 			} else if(result.unipeople == 2){
-				bc.setCategoryGap(150);
+				bc.setCategoryGap(50);
 			}
 
-			Scene scene = new Scene(bc, 800, 600);
+			Label reminder = new Label("*You can click on the corresponding bar \n and the exact value will be displayed.*");
+			reminder.setTextFill(Color.GRAY);
+			reminder.setStyle("-fx-font: 16 arial;");
+			reminder.setTranslateX(20);
+			reminder.setTranslateY(400);
+
+			Group root = new Group();
+			root.getChildren().addAll(bc,caption,reminder);
+
+			Scene scene = new Scene(root, 500, 450);
+
 			bc.getData().addAll(series1);
+
+			for (XYChart.Series<String,Number> serie: bc.getData()){
+				for (XYChart.Data<String, Number> item: serie.getData()){
+					item.getNode().setOnMousePressed((MouseEvent event) -> {
+						//System.out.println(item.toString());
+						caption.setTranslateX(event.getSceneX());
+						caption.setTranslateY(event.getSceneY());
+						caption.setText(String.valueOf(item.getYValue()));
+					});
+				}
+			}
+
 			stage.setScene(scene);
 			stage.show();
 			oReport = "Success";
@@ -266,9 +433,9 @@ public class Task2 {
 			}
 
 			final PieChart chart = new PieChart(pieChartData);
-			chart.setTitle(kstring + "-th Popular Names between " + yearstartstring + " to " + yearendstring);
+			chart.setTitle(ordinalConversion(k) + " Popular Names between " + yearstartstring + " to " + yearendstring);
 			final Label caption = new Label("");
-			caption.setTextFill(Color.DARKORANGE);
+			caption.setTextFill(Color.BLACK);
 			caption.setStyle("-fx-font: 24 arial;");
 
 			for (final PieChart.Data data : chart.getData()) {
@@ -282,7 +449,7 @@ public class Task2 {
 							}
 						});
 			}
-			Label reminder = new Label("*You can click on the corresponding slice of the pie chart \n and the value will be displayed.(Rounded down to 2 d.p.)*");
+			Label reminder = new Label("*You can click on the corresponding slice \n and the value will be displayed.(Rounded down to 2 d.p.)*");
 			reminder.setTextFill(Color.GRAY);
 			reminder.setStyle("-fx-font: 16 arial;");
 			reminder.setTranslateX(20);
@@ -306,7 +473,7 @@ public class Task2 {
 		 	int k = Integer.parseInt(kstring);
 		 	SortedPeopleList result = generateOutput(yearstart,yearend,k,gender);
 			People toppeople = result.sortedpeoplelist[0];
-			oReport = toppeople.name + " has hold the " + kstring + "-th rank most often for a total of " + toppeople.freq + " timesamong names registered for baby " + "girls" + " born in the period from " + yearstartstring + " to " + yearendstring + ".\n";
+			oReport = toppeople.name + " has hold the " + ordinalConversion(k) + " rank most often for a total of " + toppeople.freq + " timesamong names registered for baby " + "girls" + " born in the period from " + yearstartstring + " to " + yearendstring + ".\n";
 			oReport += "The total number of occurrences of " + toppeople.name + " is " + toppeople.occurrence + ", which represents " + String.format("%.2f",(double)toppeople.occurrence/result.totaloccurrence * 100) + "% of total " + "female" + " births at the " + kstring + "-th rank in the period from " + yearstartstring + " to " + yearendstring + ".";
 			
 			 //Jessica has hold the 8-th rank most often for a total of 4 timesamong names registered for baby girls born in the period from 2000 to 2010.
