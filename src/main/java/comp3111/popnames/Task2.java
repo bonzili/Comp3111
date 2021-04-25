@@ -94,20 +94,36 @@ public class Task2 {
 		}
 		return result;
 	}
+	public static String Gender(String gender){
+		if (gender.equals("M")){
+			return "Male";
+		}else if (gender.equals("F")){
+			return "Female";
+		}
+		return null;
+	}
+	public static String Genderbaby(String gender){
+		if (gender.equals("M")){
+			return "boys";
+		}else if (gender.equals("F")){
+			return "girls";
+		}
+		return null;
+	}
 
 	public static CSVParser getFileParser(int year) {
      FileResource fr = new FileResource(String.format("dataset/yob%s.csv", year));
      return fr.getCSVParser(false);
 	}
 	
-	private static void popupMessage(String error,String extra) {
+	public static void popupMessage(String error,String extra) {
 		JOptionPane.showMessageDialog(null,
 			    "Please enter a valid " + error + "! " + extra,
 			    "Input Error",
 			    JOptionPane.WARNING_MESSAGE);
 	}
 	
-	private static boolean checkinputvalid(String yearstartstring, String yearendstring, String kstring, String gender) {
+	public static boolean checkinputvalid(String yearstartstring, String yearendstring, String kstring, String gender) {
 		boolean valid = true;
 		String integeronly = "It only accept an integer value.";
 		if (!(yearstartstring.matches("^[0-9]*$"))){
@@ -171,7 +187,7 @@ public class Task2 {
 				}
 			}
 		}
-		System.out.println(year);
+		//System.out.println(year);
 		if (found)
 			return people;
 		else
@@ -282,7 +298,7 @@ public class Task2 {
 			int k = Integer.parseInt(kstring);
 			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);
 			if (result == null){
-				return "Error";
+				return "Error. The result cannot be generated.";
 			}
 
 			TableView<Person> table = new TableView<Person>();
@@ -298,8 +314,8 @@ public class Task2 {
 			stage.setWidth(450);
 			stage.setHeight(520);
 
-			final Label label = new Label(ordinalConversion(k) + " Popular Names between " + yearstartstring + " to " + yearendstring);
-			label.setFont(new Font("Arial", 20));
+			final Label label = new Label(ordinalConversion(k) + " Popular " + Gender(gender) + " Names between " + yearstartstring + " to " + yearendstring);
+			label.setFont(new Font("Arial", 18));
 
 			table.setEditable(false);
 
@@ -356,7 +372,7 @@ public class Task2 {
 
 			stage.setScene(scene);
 			stage.show();
-
+			oReport = "A PopUp window is displayed showing a data table of the " + label.getText() + ".\nYou can click on the header of different column to arrange the data differently. \nDefault arragement: Arraged by the reverse order of occurrences. \nIf names with the occurrences are tied, they are sorted and presented in alphabetical order.";
 		}
 		 return oReport;
 	 }
@@ -378,7 +394,7 @@ public class Task2 {
 			final NumberAxis yAxis = new NumberAxis();
 			final BarChart<String, Number> bc =
 					new BarChart<String, Number>(xAxis, yAxis);
-			bc.setTitle(ordinalConversion(k) + " Popular Names between " + yearstartstring + " to " + yearendstring);
+			bc.setTitle(ordinalConversion(k) + " Popular " + Gender(gender) + " Names between " + yearstartstring + " to " + yearendstring);
 			xAxis.setLabel("Name");
 			yAxis.setLabel("Occurrences");
 			XYChart.Series series1 = new XYChart.Series();
@@ -398,7 +414,7 @@ public class Task2 {
 				bc.setCategoryGap(50);
 			}
 
-			Label reminder = new Label("*You can click on the corresponding bar \n and the exact value will be displayed.*");
+			Label reminder = new Label("*You can click on the corresponding bar \nand the exact value will be displayed.*");
 			reminder.setTextFill(Color.GRAY);
 			reminder.setStyle("-fx-font: 16 arial;");
 			reminder.setTranslateX(20);
@@ -424,7 +440,8 @@ public class Task2 {
 
 			stage.setScene(scene);
 			stage.show();
-			oReport = "Success";
+			oReport = "A PopUp window is displayed showing a bar chart of the " + bc.getTitle() + ". \nEach name is associated with a bar representing the frequency of having hold the "+ ordinalConversion(k) +" rank. \nThe longer the bar, the more often the name has been ranked at "+ ordinalConversion(k)+".\nYou can click on the corresponding bar to display the exact value of the bar.";
+
 		}
 		return oReport;
 	 }
@@ -443,14 +460,13 @@ public class Task2 {
 			stage.setTitle("Pie Chart");
 			stage.setWidth(500);
 			stage.setHeight(500);
-
 			ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 			for (People ppl : result.sortedpeoplelist) {
 				pieChartData.add(new PieChart.Data(ppl.name,ppl.occurrence));
 			}
 
 			final PieChart chart = new PieChart(pieChartData);
-			chart.setTitle(ordinalConversion(k) + " Popular Names between " + yearstartstring + " to " + yearendstring);
+			chart.setTitle(ordinalConversion(k) + " Popular " + Gender(gender) + " Names between " + yearstartstring + " to " + yearendstring);
 			final Label caption = new Label("");
 			caption.setTextFill(Color.BLACK);
 			caption.setStyle("-fx-font: 24 arial;");
@@ -466,7 +482,7 @@ public class Task2 {
 							}
 						});
 			}
-			Label reminder = new Label("*You can click on the corresponding slice \n and the value will be displayed.(Rounded down to 2 d.p.)*");
+			Label reminder = new Label("*You can click on the corresponding slice \nand the value will be displayed.(Rounded down to 2 d.p.)*");
 			reminder.setTextFill(Color.GRAY);
 			reminder.setStyle("-fx-font: 16 arial;");
 			reminder.setTranslateX(20);
@@ -476,7 +492,7 @@ public class Task2 {
 			stage.setScene(scene);
 			stage.show();
 
-			oReport = "This illustration shows a chart in the shape of a normal pie. It contains five slices of different sizes.";
+			oReport = "A PopUp window is displayed showing a pie chart of the " + chart.getTitle() + ". \nEach name is shown as a sector in the chart representing the associated frequencty of having hold the "+ ordinalConversion(k) +" rank. \nThe bigger the sector, the more often the name has been ranked at "+ ordinalConversion(k)+".\nYou can click on the corresponding slice to display the value of the slice.";
 
 		}
 		 return oReport;
@@ -493,8 +509,8 @@ public class Task2 {
 		 		return "Error";
 			}
 			People toppeople = result.sortedpeoplelist[0];
-			oReport = toppeople.name + " has hold the " + ordinalConversion(k) + " rank most often for a total of " + toppeople.freq + " timesamong names registered for baby " + "girls" + " born in the period from " + yearstartstring + " to " + yearendstring + ".\n";
-			oReport += "The total number of occurrences of " + toppeople.name + " is " + toppeople.occurrence + ", which represents " + String.format("%.2f",(double)toppeople.occurrence/result.totaloccurrence * 100) + "% of total " + "female" + " births at the " + kstring + "-th rank in the period from " + yearstartstring + " to " + yearendstring + ".";
+			oReport = toppeople.name + " has hold the " + ordinalConversion(k) + " rank most often for a total of " + toppeople.freq + " times among \nnames registered for baby " + Genderbaby(gender) + " born in the period from " + yearstartstring + " to " + yearendstring + ".\n";
+			oReport += "The total number of occurrences of " + toppeople.name + " is " + toppeople.occurrence + ", which represents \n" + String.format("%.2f",(double)toppeople.occurrence/result.totaloccurrence * 100) + "% of total " + Gender(gender) + " births at the " + ordinalConversion(k) + " rank in the period from " + yearstartstring + " to " + yearendstring + ".";
 			
 			 //Jessica has hold the 8-th rank most often for a total of 4 timesamong names registered for baby girls born in the period from 2000 to 2010.
 			 //The total number of occurrences of Jessica is 1592, which represents 36.4% of total female births at the 8-th rank in the period from 2000 to 2010.

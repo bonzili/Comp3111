@@ -79,7 +79,7 @@ public class Controller {
     private Tab tabApp3;
 
     @FXML
-    private TextArea textAreaConsole;
+    public TextArea textAreaConsole;
     
     @FXML
     private ComboBox<String> comboboxGender;
@@ -141,7 +141,11 @@ public class Controller {
     @FXML
     public RadioButton Older;
 
+    @FXML
+    public TextField textfieldNameItitialT5;
 
+    @FXML
+    private Slider consolefontslider;
 
 
     /**
@@ -345,7 +349,7 @@ public class Controller {
      */
     @FXML
     void displayHelpT5() {
-        JOptionPane.showMessageDialog(null, "Seeking advices on identifying the name of a person who would become your soulmate? Enter the following information and let's go find you soulmate!","Help Message for T5",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Seeking advices on identifying the name of a person who would become your soulmate? \n Enter the following information and let's find your soulmate!","Help Message for T5",JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -355,7 +359,7 @@ public class Controller {
      */
     @FXML
     void displayHelpT5X1() {
-        JOptionPane.showMessageDialog(null, "An algorithm which compute the name base on the most popular name in your preferred gender in your year of birth","Help Message for Algorithm T5X1.",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "An algorithm that compute the name of your potential soulmate which is equal to \n the most popular name in your preferred gender in your year of birth.","Help Message for Algorithm T5X1",JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -365,7 +369,7 @@ public class Controller {
      */
     @FXML
     void displayHelpT5X2() {
-        JOptionPane.showMessageDialog(null, "An algorithm which compute the name base on the most popular name in your preferred gender in your year of birth","Help Message for Algorithm T5X2.",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "An algorithm that compute the name of your potential soulmate which is equal to \n most popular name in your preferred gender with your preferred initial (or the same initial as your initial if it is empty) \n from 1880 to your year of birth or from your year of birth to 2019 (determined by your preferred age).","Help Message for Algorithm T5X2",JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -379,6 +383,7 @@ public class Controller {
         String year = textfieldYearT5.getText();
         String gender = comboboxGenderT5.getValue();
         String preferredGender = comboboxPreferredGenderT5.getValue();
+        String preferredInitial = textfieldNameItitialT5.getText();
         String preferredAge = "";
         String Algo = "";
         String oReport = "";
@@ -409,12 +414,38 @@ public class Controller {
             Emptywarning("Algorithm");
             empty = true;
         }
+        if (!name.equals("")){
+            name = name.toLowerCase();
+            StringBuilder nameString = new StringBuilder(name);
+            nameString.setCharAt(0, Character.toUpperCase(name.charAt(0)));
+            name = nameString.toString();
+        }
+        if (preferredInitial.equals("")){
+            if (!name.equals("")) {
+                preferredInitial = String.valueOf(name.charAt(0));
+            }
+        }else{
+            preferredInitial = preferredInitial.toUpperCase();
+        }
         if (!empty){
-            oReport = Task5.doFindT5(name,year,gender,preferredGender,preferredAge,Algo);
+            if (Algo.equals("T5X1")) {
+                oReport = Task5.doFindT5X1(name, year, gender, preferredInitial, preferredGender, preferredAge);
+            }else if (Algo.equals("T5X2")){
+                oReport = Task5.doFindT5X2(name, year, gender, preferredInitial, preferredGender, preferredAge);
+            }
         }
         //System.out.println(Older.isSelected());
         textAreaConsole.setText(oReport);
         textAreaConsole.setEditable(false);
     }
+
+    @FXML
+    void doConsolefontChanged(){
+        int size = (int) consolefontslider.getValue();
+        String style = "-fx-font-size: " + size;
+        textAreaConsole.setStyle(style);
+    }
+
+
 }
 
