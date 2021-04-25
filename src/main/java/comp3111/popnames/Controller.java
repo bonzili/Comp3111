@@ -4,12 +4,11 @@
 package comp3111.popnames;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import javax.swing.*;
 
 public class Controller {
 
@@ -84,8 +83,67 @@ public class Controller {
     
     @FXML
     private ComboBox<String> comboboxGender;
- 
-    
+
+    @FXML
+    private Button help_buttonT2;
+
+    @FXML
+    private Button buttonSummaryT2;
+
+    @FXML
+    private Button buttonDataTableT2;
+
+    @FXML
+    private Button buttonBarChartT2;
+
+    @FXML
+    private Button buttonPieChartT2;
+
+    @FXML
+    private Button help_buttonT5;
+
+    @FXML
+    private Button help_buttonT5X1;
+
+    @FXML
+    private Button help_buttonT5X2;
+
+    @FXML
+    private Button buttonFindT5;
+
+    @FXML
+    private TextField textfieldNameT5;
+
+    @FXML
+    private TextField textfieldYearT5;
+
+    @FXML
+    private ComboBox<String> comboboxGenderT5;
+
+    @FXML
+    private ComboBox<String> comboboxPreferredGenderT5;
+
+    @FXML
+    public ToggleGroup age;
+
+    @FXML
+    public ToggleGroup algo;
+
+    @FXML
+    public RadioButton T5X2;
+
+    @FXML
+    public RadioButton T5X1;
+
+    @FXML
+    public RadioButton Younger;
+
+    @FXML
+    public RadioButton Older;
+
+
+
+
     /**
      *  Task Zero
      *  To be triggered by the "Summary" button on the Task Zero Tab 
@@ -169,7 +227,31 @@ public class Controller {
     		oReport += String.format("#%d: %s\n", i, AnalyzeNames.getName(iYear, i, "M"));
     	textAreaConsole.setText(oReport);
     }
-    
+
+
+    void Emptywarning(String error){
+        JOptionPane.showMessageDialog(null,
+                "Please enter a valid " + error + "! It is empty right now.",
+                "Input Error",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    boolean checkEmptyT2(){
+        boolean empty = false;
+        if (textfieldYearStart.getText().equals("")){
+            Emptywarning("Starting Year");
+            empty = true;
+        }
+        if (textfieldYearEnd.getText().equals("")){
+            Emptywarning("Ending Year");
+            empty = true;
+        }
+        if (textfieldK.getText().equals("")){
+            Emptywarning("Rank K");
+            empty = true;
+        }
+        return empty;
+    }
     /**
      *  Task Two
      *  
@@ -181,7 +263,10 @@ public class Controller {
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
     	String gender = comboboxGender.getValue();
-    	String oReport = Task2.getSummaryT2(yearstartstring, yearendstring, rankstring, gender);
+    	String oReport = "";
+    	if (!checkEmptyT2()){
+    	    oReport = Task2.getSummaryT2(yearstartstring, yearendstring, rankstring, gender);
+        }
     	textAreaConsole.setText(oReport);
         textAreaConsole.setEditable(false);
     }
@@ -197,7 +282,10 @@ public class Controller {
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
         String gender = comboboxGender.getValue();
-    	String oReport = Task2.getDataTableT2(yearstartstring, yearendstring, rankstring, gender);
+        String oReport = "";
+        if (!checkEmptyT2()){
+            oReport = Task2.getDataTableT2(yearstartstring, yearendstring, rankstring, gender);
+        }
     	textAreaConsole.setText(oReport);
         textAreaConsole.setEditable(false);
     }
@@ -213,7 +301,10 @@ public class Controller {
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
         String gender = comboboxGender.getValue();
-    	String oReport = Task2.getBarChartT2(yearstartstring, yearendstring, rankstring, gender);
+        String oReport = "";
+        if (!checkEmptyT2()){
+            oReport = Task2.getBarChartT2(yearstartstring, yearendstring, rankstring, gender);
+        }
     	textAreaConsole.setText(oReport);
         textAreaConsole.setEditable(false);
     }
@@ -229,8 +320,100 @@ public class Controller {
     	String yearendstring = textfieldYearEnd.getText();
     	String rankstring = textfieldK.getText();
         String gender = comboboxGender.getValue();
-    	String oReport = Task2.getPieChartT2(yearstartstring, yearendstring, rankstring, gender);
+        String oReport = "";
+        if (!checkEmptyT2()){
+            oReport = Task2.getPieChartT2(yearstartstring, yearendstring, rankstring, gender);
+        }
     	textAreaConsole.setText(oReport);
+        textAreaConsole.setEditable(false);
+    }
+
+    /**
+     *  Task Two
+     *
+     *
+     */
+    @FXML
+    void displayHelpT2() {
+        JOptionPane.showMessageDialog(null, "Generate a report in response to the queries on the K-th popular names over a given period.","Help Message for T2",JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     *  Task Five
+     *
+     *
+     */
+    @FXML
+    void displayHelpT5() {
+        JOptionPane.showMessageDialog(null, "Seeking advices on identifying the name of a person who would become your soulmate? Enter the following information and let's go find you soulmate!","Help Message for T5",JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     *  Task Five
+     *
+     *
+     */
+    @FXML
+    void displayHelpT5X1() {
+        JOptionPane.showMessageDialog(null, "An algorithm which compute the name base on the most popular name in your preferred gender in your year of birth","Help Message for Algorithm T5X1.",JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     *  Task Five
+     *
+     *
+     */
+    @FXML
+    void displayHelpT5X2() {
+        JOptionPane.showMessageDialog(null, "An algorithm which compute the name base on the most popular name in your preferred gender in your year of birth","Help Message for Algorithm T5X2.",JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     *  Task Five
+     *
+     *
+     */
+    @FXML
+    void doFindT5() {
+        String name = textfieldNameT5.getText();
+        String year = textfieldYearT5.getText();
+        String gender = comboboxGenderT5.getValue();
+        String preferredGender = comboboxPreferredGenderT5.getValue();
+        String preferredAge = "";
+        String Algo = "";
+        String oReport = "";
+        if (Older.isSelected()){
+            preferredAge = "Older";
+        }else if (Younger.isSelected()){
+            preferredAge = "Younger";
+        }
+        if (T5X1.isSelected()){
+            Algo = "T5X1";
+        }else if (T5X2.isSelected()){
+            Algo = "T5X2";
+        }
+        boolean empty = false;
+        if (name.equals("")){
+            Emptywarning("Name");
+            empty = true;
+        }
+        if (year.equals("")){
+            Emptywarning("Year of Birth");
+            empty = true;
+        }
+        if (preferredAge.equals("")){
+            Emptywarning("Preferred Age");
+            empty = true;
+        }
+        if (Algo.equals("")){
+            Emptywarning("Algorithm");
+            empty = true;
+        }
+        if (!empty){
+            oReport = Task5.doFindT5(name,year,gender,preferredGender,preferredAge,Algo);
+        }
+        //System.out.println(Older.isSelected());
+        textAreaConsole.setText(oReport);
         textAreaConsole.setEditable(false);
     }
 }

@@ -76,6 +76,7 @@ class People{
 
 public class Task2 {
 
+
 	public static String ordinalConversion(int Cardinal){
 		String result = "";
 		switch(Cardinal) {
@@ -102,7 +103,7 @@ public class Task2 {
 	private static void popupMessage(String error,String extra) {
 		JOptionPane.showMessageDialog(null,
 			    "Please enter a valid " + error + "! " + extra,
-			    "Type Error",
+			    "Input Error",
 			    JOptionPane.WARNING_MESSAGE);
 	}
 	
@@ -170,11 +171,17 @@ public class Task2 {
 				}
 			}
 		}
+		System.out.println(year);
 		if (found)
 			return people;
 		else
-			popupMessage("input","No name can be found in rank "+ rank + " in year " + year + ".");
+		{
+			JOptionPane.showMessageDialog(null,
+					"Please try to search for another value. " + "No name can be found in rank "+ rank + " in year " + year + ".",
+					"Database Error",
+					JOptionPane.WARNING_MESSAGE);
 			return null;
+		}
 	}
 
 	public static SortedPeopleList sortPeople(People[] peoplelist){
@@ -210,6 +217,8 @@ public class Task2 {
 			People temp = getPeople(yearstart+i,k,gender);
 			if (temp != null){
 				peoplelist[i] = temp;
+			}else{
+				return null;
 			}
 		}
 		SortedPeopleList output = sortPeople(peoplelist);
@@ -272,6 +281,9 @@ public class Task2 {
 			int yearend = Integer.parseInt(yearendstring);
 			int k = Integer.parseInt(kstring);
 			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);
+			if (result == null){
+				return "Error";
+			}
 
 			TableView<Person> table = new TableView<Person>();
 
@@ -356,6 +368,9 @@ public class Task2 {
 			int yearend = Integer.parseInt(yearendstring);
 			int k = Integer.parseInt(kstring);
 			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);
+			if (result == null){
+				return "Error";
+			}
 
 			Stage stage = new Stage();
 			stage.setTitle("Bar Chart");
@@ -420,7 +435,9 @@ public class Task2 {
 			int yearend = Integer.parseInt(yearendstring);
 			int k = Integer.parseInt(kstring);
 			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);
-
+			if (result == null){
+				return "Error";
+			}
 			Stage stage = new Stage();
 			Scene scene = new Scene(new Group());
 			stage.setTitle("Pie Chart");
@@ -472,6 +489,9 @@ public class Task2 {
 		 	int yearend = Integer.parseInt(yearendstring);
 		 	int k = Integer.parseInt(kstring);
 		 	SortedPeopleList result = generateOutput(yearstart,yearend,k,gender);
+		 	if (result == null){
+		 		return "Error";
+			}
 			People toppeople = result.sortedpeoplelist[0];
 			oReport = toppeople.name + " has hold the " + ordinalConversion(k) + " rank most often for a total of " + toppeople.freq + " timesamong names registered for baby " + "girls" + " born in the period from " + yearstartstring + " to " + yearendstring + ".\n";
 			oReport += "The total number of occurrences of " + toppeople.name + " is " + toppeople.occurrence + ", which represents " + String.format("%.2f",(double)toppeople.occurrence/result.totaloccurrence * 100) + "% of total " + "female" + " births at the " + kstring + "-th rank in the period from " + yearstartstring + " to " + yearendstring + ".";
