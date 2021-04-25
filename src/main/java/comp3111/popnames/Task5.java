@@ -3,14 +3,20 @@ package comp3111.popnames;
 import edu.duke.FileResource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.commons.csv.CSVParser;
@@ -78,14 +84,98 @@ public class Task5 {
         if (checkinputvalid(namestring,yearstring,preferredInital)){
             int year = Integer.parseInt(yearstring);
             SortedPeopleList result = null;
-            System.out.println(namestring + yearstring +gender+preferredInital+preferredGender+preferredAge);
+            //System.out.println(namestring + yearstring +gender+preferredInital+preferredGender+preferredAge);
+            String yearstartstring = "";
+            String yearendstring = "";
             if (preferredAge.equals("Younger")) {
                 result = generateOutput(year,2019,preferredGender,preferredInital);
+                yearstartstring = String.valueOf(year);
+                yearendstring = String.valueOf(2019);
             }else if (preferredAge.equals("Older")){
                 result = generateOutput(1880,year,preferredGender,preferredInital);
+                yearstartstring = String.valueOf(1880);
+                yearendstring = String.valueOf(year);
             }
             if (result != null){
-                oReport = result.sortedpeoplelist[0].name;
+                Stage imagestage = new Stage();
+                Image image = new Image("name_initials_effect.png");
+                //Creating the image view
+                ImageView imageView = new ImageView();
+                //Setting image to the image view
+                imageView.setImage(image);
+                //Setting the image view parameters
+                imageView.setX(10);
+                imageView.setY(10);
+                imageView.setFitWidth(575);
+                imageView.setPreserveRatio(true);
+                //Setting the Scene object
+                Group root = new Group(imageView);
+                Scene sceneimage = new Scene(root, 650, 500);
+                imagestage.setTitle("Research study for name-letter effect");
+                imagestage.setScene(sceneimage);
+
+
+                Stage stage = new Stage();
+                Scene scene = new Scene(new Group());
+                stage.setTitle("Pie Chart");
+                stage.setWidth(500);
+                stage.setHeight(500);
+                ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+                for (People ppl : result.sortedpeoplelist) {
+                    pieChartData.add(new PieChart.Data(ppl.name,ppl.occurrence));
+                }
+
+                final PieChart chart = new PieChart(pieChartData);
+                chart.setTitle("Popular " + Task2.Gender(gender) + " Names with initial " + preferredInital + " between " + yearstartstring + " to " + yearendstring);
+                final Label caption = new Label("");
+                caption.setTextFill(Color.BLACK);
+                caption.setStyle("-fx-font: 22 arial;");
+
+                for (final PieChart.Data data : chart.getData()) {
+                    SortedPeopleList finalResult = result;
+                    data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,
+                            new EventHandler<MouseEvent>() {
+                                @Override public void handle(MouseEvent e) {
+                                    caption.setTranslateX(e.getSceneX());
+                                    caption.setTranslateY(e.getSceneY());
+                                    caption.setText(String.format("%.2f",(double)data.getPieValue()/ finalResult.totaloccurrence*100)
+                                            + "%");
+                                }
+                            });
+                }
+                Label reminder = new Label("*You can click on the corresponding slice \nand the value will be displayed.(Rounded down to 2 d.p.)*");
+                reminder.setTextFill(Color.GRAY);
+                reminder.setStyle("-fx-font: 16 arial;");
+                reminder.setTranslateX(20);
+                reminder.setTranslateY(400);
+
+                ((Group) scene.getRoot()).getChildren().addAll(chart, caption,reminder);
+                stage.setScene(scene);
+                stage.show();
+
+                String initialtext = "";
+                if (preferredInital.equals(String.valueOf(namestring.charAt(0)))){
+                    initialtext = "your own initial";
+                }else{
+                    initialtext = "your preferred initial";
+                }
+                String yearrange = "";
+                if (preferredAge.equals("Younger")){
+                    yearrange = " from " + yearstring + " to 2019";
+                }else{
+                    yearrange = " from 1880 to " + yearstring;
+                }
+
+                oReport = "After calculating the most popular name of your preferred gender with " + initialtext + yearrange + ",\nwe are glad to tell you that the person with the name: "+ result.sortedpeoplelist[0].name + " are more likely to become your soulmate! \n" + "According to the name-letter effect discovered in 1985 by the Belgian psychologist Jozef Nuttin,\npeople tends to prefer the letters in their name especially for their name initial over other letters in the alphabet.\nThis is because most people like themselves and the name is associated with the self. Hence the letters of the name are preferred.\n";
+                if (preferredInital.equals(String.valueOf(namestring.charAt(0)))){
+                    imagestage.show();
+                    oReport += "As you can see from the PopUp bar chart, groups with shared initials have higher group performance, collective efficacy and adaptive conflict ability.\nSince " + result.sortedpeoplelist[0].name + " shared the same name initial " + preferredInital + " with you, you two are born to become soulmate!\n";
+                }else{
+                    oReport += "Although you flavor other initial than your own initial, you can try to fill in your own initial in the preferred initial field or leave it blank.\n";
+                }
+                oReport += "Moreover, base on our databases, "+ result.totaloccurrence + " of baby "+ Task2.Genderbaby(preferredGender) + " with the initial " + preferredInital + " were born in year from " + yearstartstring +" to " + yearendstring + ".\nAnd "+ result.sortedpeoplelist[0].occurrence + " of them are called " + result.sortedpeoplelist[0].name + "."+ " So as you can see from the PopUp chart, there are " + String.format("%.2f",(double)result.sortedpeoplelist[0].occurrence/result.totaloccurrence * 100) + "% you will meet your soulmate! \nGood Luck!";
+
+                //oReport = result.sortedpeoplelist[0].name;
             }
         }
         return oReport;
