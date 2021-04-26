@@ -1,5 +1,6 @@
 package comp3111.popnames;
 
+import java.awt.*;
 import java.util.*;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -79,6 +80,9 @@ public class Task2 {
 
 	public static String ordinalConversion(int Cardinal){
 		String result = "";
+		if (Cardinal <= 0){
+			return null;
+		}
 		switch(Cardinal) {
 			case 1:
 				result = "1-st";
