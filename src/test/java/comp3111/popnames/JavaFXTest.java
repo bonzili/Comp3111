@@ -37,6 +37,7 @@ public class JavaFXTest extends ApplicationTest {
 		clickOn("#buttonRankM");
 		//sleep(1000);
 		String s1 = t.getText();
+
 		clickOn("#buttonRankM");
 		//sleep(1000);
 		String s2 = t.getText();
@@ -63,5 +64,5 @@ public class JavaFXTest extends ApplicationTest {
 		String s = t.getText();
 		assertTrue(s.equals("David"));
 	}
-		
+
 }
