@@ -27,6 +27,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Task 5 - An Online service using empirical data to help make informed decisions on predicting names for compatible pairs.
+ * @author  Li Ho Yin
+ */
 public class Task5 {
 
     public static CSVParser getFileParser(int year) {
@@ -34,6 +38,14 @@ public class Task5 {
         return fr.getCSVParser(false);
     }
 
+    /**
+     * Task 5 - Ensure that the input is valid by checking their type and range.
+     * @param name String inputted for Name
+     * @param yearstring String inputted for Year of Birth
+     * @param preferredInitial String inputted for Preferred Initial
+     * @return A boolean value showing the input is valid or not
+     * @author  Li Ho Yin
+     */
     public static boolean checkinputvalid(String name, String yearstring, String preferredInitial) {
         boolean valid = true;
         String integeronly = "It only accept an integer value.";
@@ -41,7 +53,7 @@ public class Task5 {
             Task2.popupMessage("Name", "It only accept English letters.");
             valid = false;
         }
-        if (!(preferredInitial.matches("^[A-Z]$"))){
+        if (!(preferredInitial.matches("^[A-Z]$")) && !(preferredInitial.equals(""))){
             Task2.popupMessage("Preferred Inital", "It only accept an uppercase English letter.");
             valid = false;
         }
@@ -59,6 +71,17 @@ public class Task5 {
         return valid;
     }
 
+    /**
+     * Task 5 - Compute the result of the recommended name base on the most popular name of gender in the user's year of birth.
+     * @param namestring String inputted for name
+     * @param yearstring String inputted for Year of Birth
+     * @param preferredInital String inputted for Preferred Initial
+     * @param gender String inputted for the user's gender
+     * @param preferredAge String inputted for Preferred Age
+     * @param preferredGender String inputted for preferred Gender
+     * @return Console String
+     * @author  Li Ho Yin
+     */
     public static String doFindT5X1(String namestring, String yearstring, String gender, String preferredInital, String preferredGender, String preferredAge){
         String oReport = "";
         if (checkinputvalid(namestring,yearstring,preferredInital)) {
@@ -79,6 +102,17 @@ public class Task5 {
         return oReport;
     }
 
+    /**
+     * Task 5 - Compute the result of the recommended name which is equal to most popular name in the user's preferred gender with his preferred initial (or the same initial as his initial if it is empty) from 1880 to his year of birth or from his year of birth to 2019 (determined by his preferred age).
+     * @param namestring String inputted for name
+     * @param yearstring String inputted for Year of Birth
+     * @param preferredInital String inputted for Preferred Initial
+     * @param gender String inputted for the user's gender
+     * @param preferredAge String inputted for Preferred Age
+     * @param preferredGender String inputted for preferred Gender
+     * @return Console String, a pie chart and a bar chart
+     * @author  Li Ho Yin
+     */
     public static String doFindT5X2(String namestring, String yearstring, String gender, String preferredInital, String preferredGender, String preferredAge){
         String oReport = "";
         if (checkinputvalid(namestring,yearstring,preferredInital)){
@@ -181,7 +215,14 @@ public class Task5 {
         return oReport;
     }
 
-
+    /**
+     * Task 5 - Search for the most popular people in the databases base on the year, name initial and gender.
+     * @param year The year wanted to check
+     * @param gender Gender value
+     * @param Initial Preferred Name Initial value
+     * @return The people with the year, preferred initial and gender as requested
+     * @author  Li Ho Yin
+     */
     public static People getMostPopularPersonByInitial(int year, String gender, String Initial) {
         boolean found = false;
         People people= new People("",0,0);
@@ -221,7 +262,15 @@ public class Task5 {
         }
     }
 
-
+    /**
+     * Task 5 -  Generate the output used for displaying charts and data tables.
+     * @param yearstart Starting Year
+     * @param yearend Ending Year
+     * @param initial Preferred name initial value
+     * @param gender Gender
+     * @return A sorted people list with extra info e.g. total occurrences, number of unique person
+     * @author  Li Ho Yin
+     */
     public static SortedPeopleList generateOutput(int yearstart, int yearend, String gender, String initial){
         People[] peoplelist = new People[yearend-yearstart+1];
         for (int i = 0; i < yearend-yearstart+1 ;i++){

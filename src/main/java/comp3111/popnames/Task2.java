@@ -75,9 +75,19 @@ class People{
 	}
 }
 
+/**
+ * Task 2 - Generate a report in response to the queries on the K-th popular names over a given period.
+ * @author  Li Ho Yin
+ */
 public class Task2 {
 
 
+	/**
+	 * Task 2 - Convert Cardinal value to ordinal value e.g. from 1 to 1-st. Used for console text output.
+	 * @param Cardinal the value of the cardinal value
+	 * @return Number in Ordinal value
+	 * @author  Li Ho Yin
+	 */
 	public static String ordinalConversion(int Cardinal){
 		String result = "";
 		if (Cardinal <= 0){
@@ -98,6 +108,12 @@ public class Task2 {
 		}
 		return result;
 	}
+	/**
+	 * Task 2 - Convert Gender from short form "M/F" to "Male/Female" . Used for console text output.
+	 * @param gender the short form of the gender
+	 * @return The full string of the gender.
+	 * @author  Li Ho Yin
+	 */
 	public static String Gender(String gender){
 		if (gender.equals("M")){
 			return "Male";
@@ -106,6 +122,13 @@ public class Task2 {
 		}
 		return null;
 	}
+
+	/**
+	 * Task 2 - Convert Gender from short form "M/F" to "boys/girls" . Used for console text output.
+	 * @param gender the short form of the gender
+	 * @return The full string of the gender.
+	 * @author  Li Ho Yin
+	 */
 	public static String Genderbaby(String gender){
 		if (gender.equals("M")){
 			return "boys";
@@ -119,14 +142,30 @@ public class Task2 {
      FileResource fr = new FileResource(String.format("dataset/yob%s.csv", year));
      return fr.getCSVParser(false);
 	}
-	
+
+	/**
+	 * Task 2 - Display a PopUp Message displaying the error.
+	 * @param error The error field
+	 * @param extra The extra error message
+	 * @author  Li Ho Yin
+	 */
 	public static void popupMessage(String error,String extra) {
 		JOptionPane.showMessageDialog(null,
 			    "Please enter a valid " + error + "! " + extra,
 			    "Input Error",
 			    JOptionPane.WARNING_MESSAGE);
 	}
-	
+
+
+	/**
+	 * Task 2 - Ensure that the input is valid by checking their type and range.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return A boolean value showing the input is valid or not
+	 * @author  Li Ho Yin
+	 */
 	public static boolean checkinputvalid(String yearstartstring, String yearendstring, String kstring, String gender) {
 		boolean valid = true;
 		String integeronly = "It only accept an integer value.";
@@ -171,6 +210,14 @@ public class Task2 {
 		return valid;
 	}
 
+	/**
+	 * Task 2 - Search for the people in the databases base on the year, gender and rank.
+	 * @param year The year wanted to check
+	 * @param gender Gender value
+	 * @param rank Rank K value
+	 * @return The people with the rank and gender as requested
+	 * @author  Li Ho Yin
+	 */
 	public static People getPeople(int year, int rank, String gender) {
 		boolean found = false;
 		People people= new People("",0,0);
@@ -204,6 +251,12 @@ public class Task2 {
 		}
 	}
 
+	/**
+	 * Task 2 - Sort the people list by the reverse order of occurrences and if two names have the same occurrences, they will be sorted by their name alphabetically.
+	 * @param peoplelist an unsorted people list
+	 * @return A sorted people list with extra info e.g. total occurrences, number of unique person
+	 * @author  Li Ho Yin
+	 */
 	public static SortedPeopleList sortPeople(People[] peoplelist){
 		SortedPeopleList result = new SortedPeopleList();
 		result.totalfreq = peoplelist.length;
@@ -231,6 +284,16 @@ public class Task2 {
 		return result;
 	}
 
+
+	/**
+	 * Task 2 -  Generate the output used for displaying charts and data tables.
+	 * @param yearstart Starting Year
+	 * @param yearend Ending Year
+	 * @param k Rank K
+	 * @param gender Gender
+	 * @return A sorted people list with extra info e.g. total occurrences, number of unique person
+	 * @author  Li Ho Yin
+	 */
 	public static SortedPeopleList generateOutput(int yearstart, int yearend, int k, String gender){
 		People[] peoplelist = new People[yearend-yearstart+1];
 		for (int i = 0; i < yearend-yearstart+1 ;i++){
@@ -245,14 +308,40 @@ public class Task2 {
 		return output;
 	}
 
+	/**
+	 * Task 2 - A temporarily person class used for sorting
+	 * @author  Li Ho Yin
+	 */
 	public static class Person {
 
+		/**
+		 * Task 2 - The name of the temporarily person
+		 */
 		public final SimpleStringProperty Name;
+
+		/**
+		 * Task 2 - The frequency of the temporarily person
+		 */
 		public final SimpleStringProperty Freq;
+
+		/**
+		 * Task 2 - The occurrences of the temporarily person
+		 */
 		public final SimpleStringProperty Occurrences;
+
+		/**
+		 * Task 2 - The percentage of the temporarily person existed
+		 */
 		public final SimpleStringProperty Percentage;
 
 
+		/**
+		 * Task 2 - Constructor for the temporarily person
+		 * @param Name The name of the temporarily person
+		 * @param freq The frequency of the temporarily person
+		 * @param occurrences The occurrences of the temporarily person
+		 * @param percentage The percentage of the temporarily person
+		 */
 		public Person(String Name, int freq, int occurrences, String percentage) {
 			this.Name = new SimpleStringProperty(Name);
 			this.Freq = new SimpleStringProperty(String.valueOf(freq));
@@ -260,40 +349,89 @@ public class Task2 {
 			this.Percentage = new SimpleStringProperty(percentage+"%");
 		}
 
+		/**
+		 * Task 2 - Get the name of the temporarily person
+		 * @return  The name of the person
+		 * @author  Li Ho Yin
+		 */
 		public String getName() {
 			return Name.get();
 		}
 
+		/**
+		 * Task 2 - Set the name of the temporarily person
+		 * @param Name The name wanted to set
+		 * @author  Li Ho Yin
+		 */
 		public void setName(String Name) {
 			this.Name.set(Name);
 		}
 
+		/**
+		 * Task 2 - Get the frequency of the temporarily person
+		 * @return  The frequency of the person existed
+		 * @author  Li Ho Yin
+		 */
 		public String getFreq() {
 			return Freq.get();
 		}
 
+		/**
+		 * Task 2 - Set the frequency of the temporarily person
+		 * @param frequency The frequency wanted to set
+		 * @author  Li Ho Yin
+		 */
 		public void setFreq(String frequency) {
 			this.Freq.set(frequency);
 		}
 
+		/**
+		 * Task 2 - Get the occurrences of the temporarily person
+		 * @return  The occurrences of the person
+		 * @author  Li Ho Yin
+		 */
 		public String getOccurrences() {
 			return Occurrences.get();
 		}
 
+		/**
+		 * Task 2 - Set the occurrences of the temporarily person
+		 * @param Occurrences The occurrences wanted to set
+		 * @author  Li Ho Yin
+		 */
 		public void setOccurrences(String Occurrences) {
 			this.Occurrences.set(Occurrences);
 		}
 
+		/**
+		 * Task 2 - Get the percentage of the temporarily person
+		 * @return  The percentage of the person existed
+		 * @author  Li Ho Yin
+		 */
 		public String getPercentage() {
 			return Percentage.get();
 		}
 
+		/**
+		 * Task 2 - Set the percentage of the temporarily person
+		 * @param percentage The percentage wanted to set
+		 * @author  Li Ho Yin
+		 */
 		public void setPercentage(String percentage) {
 			this.Percentage.set(percentage);
 		}
 
 	}
 
+	/**
+	 * Task 2 - Compute the result of the k-th popular name over the year in a data table.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return Console String and a PopUp window of a data table
+	 * @author  Li Ho Yin
+	 */
 	public static String getDataTableT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		String oReport = "";
 		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {
@@ -380,7 +518,17 @@ public class Task2 {
 		}
 		 return oReport;
 	 }
-	
+
+
+	/**
+	 * Task 2 - Compute the result of the k-th popular name over the year in a Bar Chart.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return Console String and a PopUp window of a Bar Chart
+	 * @author  Li Ho Yin
+	 */
 	public static String getBarChartT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		String oReport = "";
 		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {
@@ -449,6 +597,16 @@ public class Task2 {
 		}
 		return oReport;
 	 }
+
+	/**
+	 * Task 2 - Compute the result of the k-th popular name over the year in a Pie Chart.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return Console String and a PopUp window of a Pie Chart
+	 * @author  Li Ho Yin
+	 */
 	public static String getPieChartT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		String oReport = "";
 		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {
@@ -501,7 +659,16 @@ public class Task2 {
 		}
 		 return oReport;
 	 }
-	
+
+	/**
+	 * Task 2 - Compute the result of the k-th popular name over the year in text form.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return Console String
+	 * @author  Li Ho Yin
+	 */
 	 public static String getSummaryT2(String yearstartstring, String yearendstring, String kstring, String gender) {
 		 String oReport = "";
 		 if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {

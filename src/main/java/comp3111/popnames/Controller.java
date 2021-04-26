@@ -79,7 +79,7 @@ public class Controller {
     private Tab tabApp3;
 
     @FXML
-    public TextArea textAreaConsole;
+    private TextArea textAreaConsole;
     
     @FXML
     private ComboBox<String> comboboxGender;
@@ -124,25 +124,25 @@ public class Controller {
     private ComboBox<String> comboboxPreferredGenderT5;
 
     @FXML
-    public ToggleGroup age;
+    private ToggleGroup age;
 
     @FXML
-    public ToggleGroup algo;
+    private ToggleGroup algo;
 
     @FXML
-    public RadioButton T5X2;
+    private RadioButton T5X2;
 
     @FXML
-    public RadioButton T5X1;
+    private RadioButton T5X1;
 
     @FXML
-    public RadioButton Younger;
+    private RadioButton Younger;
 
     @FXML
-    public RadioButton Older;
+    private RadioButton Older;
 
     @FXML
-    public TextField textfieldNameItitialT5;
+    private TextField textfieldNameItitialT5;
 
     @FXML
     private Slider consolefontslider;
@@ -233,6 +233,12 @@ public class Controller {
     }
 
 
+
+    /**
+     * Displaying the warning message if some input are found to be empty.
+     *
+     * @author  Li Ho Yin
+     */
     void Emptywarning(String error){
         JOptionPane.showMessageDialog(null,
                 "Please enter a valid " + error + "! It is empty right now.",
@@ -240,6 +246,11 @@ public class Controller {
                 JOptionPane.WARNING_MESSAGE);
     }
 
+    /**
+     * Check every input in T2 to see if there are empty
+     *
+     * @author  Li Ho Yin
+     */
     boolean checkEmptyT2(){
         boolean empty = false;
         if (textfieldYearStart.getText().equals("")){
@@ -256,10 +267,11 @@ public class Controller {
         }
         return empty;
     }
+
     /**
-     *  Task Two
-     *  
-     *  
+     * Task 2 - After the user clicked the summary button, send the inputted value to Task2.java to calculate the result.
+     *
+     * @author  Li Ho Yin
      */
     @FXML
     void doSummaryT2() {
@@ -274,11 +286,11 @@ public class Controller {
     	textAreaConsole.setText(oReport);
         textAreaConsole.setEditable(false);
     }
-    
+
     /**
-     *  Task Two
-     *  
-     *  
+     * Task 2 - After the user clicked the Result(Data Table) button, send the inputted value to Task2.java to calculate the result.
+     *
+     * @author  Li Ho Yin
      */
     @FXML
     void doDataTableT2() {
@@ -293,11 +305,11 @@ public class Controller {
     	textAreaConsole.setText(oReport);
         textAreaConsole.setEditable(false);
     }
-    
+
     /**
-     *  Task Two
-     *  
-     *  
+     * Task 2 - After the user clicked the Result(Bar Chart) button, send the inputted value to Task2.java to calculate the result.
+     *
+     * @author  Li Ho Yin
      */
     @FXML
     void doBarChartT2() {
@@ -312,11 +324,11 @@ public class Controller {
     	textAreaConsole.setText(oReport);
         textAreaConsole.setEditable(false);
     }
-    
+
     /**
-     *  Task Two
-     *  
-     *  
+     * Task 2 - After the user clicked the Result(Pie Chart) button, send the inputted value to Task2.java to calculate the result.
+     *
+     * @author  Li Ho Yin
      */
     @FXML
     void doPieChartT2() {
@@ -333,9 +345,9 @@ public class Controller {
     }
 
     /**
-     *  Task Two
+     * Task 2 - After the user clicked the help button, display a help message about the function of Task 2.
      *
-     *
+     * @author  Li Ho Yin
      */
     @FXML
     void displayHelpT2() {
@@ -343,9 +355,9 @@ public class Controller {
     }
 
     /**
-     *  Task Five
+     * Task 5 - After the user clicked the help button, display a help message about the function of Task 5.
      *
-     *
+     * @author  Li Ho Yin
      */
     @FXML
     void displayHelpT5() {
@@ -353,9 +365,9 @@ public class Controller {
     }
 
     /**
-     *  Task Five
+     * Task 5 - After the user clicked the help button for Algorithm T5X1, display a help message about the function of algorithm T5X1.
      *
-     *
+     * @author  Li Ho Yin
      */
     @FXML
     void displayHelpT5X1() {
@@ -363,9 +375,9 @@ public class Controller {
     }
 
     /**
-     *  Task Five
+     * Task 5 - After the user clicked the help button for Algorithm T5X2, display a help message about the function of algorithm T5X2.
      *
-     *
+     * @author  Li Ho Yin
      */
     @FXML
     void displayHelpT5X2() {
@@ -373,9 +385,9 @@ public class Controller {
     }
 
     /**
-     *  Task Five
+     * Task 5 - After the Find your soulmate button is clicked, send the inputted value to Task5.java to compute the result.
      *
-     *
+     * @author  Li Ho Yin
      */
     @FXML
     void doFindT5() {
@@ -439,6 +451,12 @@ public class Controller {
         textAreaConsole.setEditable(false);
     }
 
+    /**
+     * UI
+     * A slider that allows the user to adjust the font size of the console.
+     *
+     * @author  Li Ho Yin
+     */
     @FXML
     void doConsolefontChanged(){
         int size = (int) consolefontslider.getValue();
