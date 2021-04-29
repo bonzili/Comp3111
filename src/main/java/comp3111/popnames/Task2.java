@@ -1,9 +1,11 @@
 package comp3111.popnames;
 
-import java.awt.*;
 import java.util.*;
-
+import javafx.application.Application;
+import javafx.scene.control.Button;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.print.PrinterJob;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.commons.csv.*;
 import javafx.collections.FXCollections;
@@ -454,7 +456,7 @@ public class Task2 {
 			Scene scene = new Scene(new Group());
 			stage.setTitle("Data table");
 			stage.setWidth(450);
-			stage.setHeight(520);
+			stage.setHeight(550);
 
 			final Label label = new Label(ordinalConversion(k) + " Popular " + Gender(gender) + " Names between " + yearstartstring + " to " + yearendstring);
 			label.setFont(new Font("Arial", 18));
@@ -509,8 +511,24 @@ public class Task2 {
 			totalpercent.setTranslateY(440);
 
 			vbox.getChildren().addAll(label, table);
+			Button btn = new Button("Print/Export to PDF");
+			btn.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+			btn.setLayoutX(125);
+			btn.setLayoutY(470);
+			btn.setOnAction(new EventHandler<ActionEvent>() {
 
-			((Group) scene.getRoot()).getChildren().addAll(vbox,total,totalfreq,totaloccur,totalpercent);
+				@Override
+				public void handle(ActionEvent event) {
+					System.out.println("To Printer!");
+					PrinterJob job = PrinterJob.createPrinterJob();
+					if(job != null){
+						job.showPrintDialog(stage);
+						job.printPage(vbox);
+						job.endJob();
+					}
+				}
+			});
+			((Group) scene.getRoot()).getChildren().addAll(vbox,total,totalfreq,totaloccur,totalpercent,btn);
 
 			stage.setScene(scene);
 			stage.show();
@@ -573,9 +591,26 @@ public class Task2 {
 			reminder.setTranslateY(400);
 
 			Group root = new Group();
-			root.getChildren().addAll(bc,caption,reminder);
+			Button btn = new Button("Print/Export to PDF");
+			btn.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+			btn.setLayoutX(140);
+			btn.setLayoutY(460);
+			btn.setOnAction(new EventHandler<ActionEvent>() {
 
-			Scene scene = new Scene(root, 500, 450);
+				@Override
+				public void handle(ActionEvent event) {
+					System.out.println("To Printer!");
+					PrinterJob job = PrinterJob.createPrinterJob();
+					if(job != null){
+						job.showPrintDialog(stage);
+						job.printPage(root);
+						job.endJob();
+					}
+				}
+			});
+			root.getChildren().addAll(bc,caption,reminder,btn);
+
+			Scene scene = new Scene(root, 500, 500);
 
 			bc.getData().addAll(series1);
 
@@ -621,7 +656,7 @@ public class Task2 {
 			Scene scene = new Scene(new Group());
 			stage.setTitle("Pie Chart");
 			stage.setWidth(500);
-			stage.setHeight(500);
+			stage.setHeight(550);
 			ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 			for (People ppl : result.sortedpeoplelist) {
 				pieChartData.add(new PieChart.Data(ppl.name,ppl.occurrence));
@@ -650,7 +685,25 @@ public class Task2 {
 			reminder.setTranslateX(20);
 			reminder.setTranslateY(400);
 
-			((Group) scene.getRoot()).getChildren().addAll(chart, caption,reminder);
+			Button btn = new Button("Print/Export to PDF");
+			btn.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+			btn.setLayoutX(137);
+			btn.setLayoutY(470);
+			btn.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					System.out.println("To Printer!");
+					PrinterJob job = PrinterJob.createPrinterJob();
+					if(job != null){
+						job.showPrintDialog(stage);
+						job.printPage(scene.getRoot());
+						job.endJob();
+					}
+				}
+			});
+
+			((Group) scene.getRoot()).getChildren().addAll(chart, caption,reminder,btn);
 			stage.setScene(scene);
 			stage.show();
 

@@ -3,11 +3,14 @@ package comp3111.popnames;
 import edu.duke.FileResource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,6 +39,23 @@ public class Task5 {
     public static CSVParser getFileParser(int year) {
         FileResource fr = new FileResource(String.format("dataset/yob%s.csv", year));
         return fr.getCSVParser(false);
+    }
+
+    /**
+     * Task 5 - Generate the output for console
+     * @param userGender The gender of the user
+     * @param preferredGender The gender of the preferred soulmate
+     * @return A string used in output
+     * @author  Li Ho Yin
+     */
+    public static String GenderOutput(String userGender,String preferredGender){
+        String output = "";
+        if (userGender.equals(preferredGender)){
+            output = "of the same gender";
+        }else {
+            output = "of different gender";
+        }
+        return output;
     }
 
     /**
@@ -95,7 +115,7 @@ public class Task5 {
                     total_occurances += Integer.parseInt(rec.get(2));
                 }
             }
-            oReport = "After calculating the most popular name of your preferred gender in your year of birth, \nwe are glad to tell you that the person with the name: " + result.name + " are more likely to become your soulmate!\nBase on our databases, "+ total_occurances + " of baby "+ Task2.Genderbaby(preferredGender) + " with " + num_names + " different names"  + " were born in year " + yearstring +" and " + result.occurrence + " of them are called " + result.name + "."+"\nSo there are " + String.format("%.2f",(double)result.occurrence/total_occurances * 100) + "% you will meet your soulmate! \nGood Luck!";
+            oReport = "After calculating the most popular name of your preferred gender in your year of birth, \nwe are glad to tell you that the person " + GenderOutput(gender,preferredGender)+ " with the name: " + result.name + " are more likely to become your soulmate!\nBase on our databases, "+ total_occurances + " of baby "+ Task2.Genderbaby(preferredGender) + " with " + num_names + " different names"  + " were born in year " + yearstring +" and " + result.occurrence + " of them are called " + result.name + "."+"\nSo there are " + String.format("%.2f",(double)result.occurrence/total_occurances * 100) + "% you will meet your soulmate! \nGood Luck!";
             //Jessica has hold the 8-th rank most often for a total of 4 timesamong names registered for baby girls born in the period from 2000 to 2010.
             //The total number of occurrences of Jessica is 1592, which represents 36.4% of total female births at the 8-th rank in the period from 2000 to 2010.
         }
@@ -153,7 +173,7 @@ public class Task5 {
                 Scene scene = new Scene(new Group());
                 stage.setTitle("Pie Chart");
                 stage.setWidth(500);
-                stage.setHeight(500);
+                stage.setHeight(550);
                 ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
                 for (People ppl : result.sortedpeoplelist) {
                     pieChartData.add(new PieChart.Data(ppl.name,ppl.occurrence));
@@ -183,7 +203,25 @@ public class Task5 {
                 reminder.setTranslateX(20);
                 reminder.setTranslateY(400);
 
-                ((Group) scene.getRoot()).getChildren().addAll(chart, caption,reminder);
+                Button btn = new Button("Print/Export to PDF");
+                btn.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+                btn.setLayoutX(137);
+                btn.setLayoutY(470);
+                btn.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println("To Printer!");
+                        PrinterJob job = PrinterJob.createPrinterJob();
+                        if(job != null){
+                            job.showPrintDialog(stage);
+                            job.printPage(scene.getRoot());
+                            job.endJob();
+                        }
+                    }
+                });
+
+                ((Group) scene.getRoot()).getChildren().addAll(chart, caption,reminder,btn);
                 stage.setScene(scene);
                 stage.show();
 
@@ -200,7 +238,7 @@ public class Task5 {
                     yearrange = " from 1880 to " + yearstring;
                 }
 
-                oReport = "After calculating the most popular name of your preferred gender with " + initialtext + yearrange + ",\nwe are glad to tell you that the person with the name: "+ result.sortedpeoplelist[0].name + " are more likely to become your soulmate! \n" + "According to the name-letter effect discovered in 1985 by the Belgian psychologist Jozef Nuttin,\npeople tends to prefer the letters in their name especially for their name initial over other letters in the alphabet.\nThis is because most people like themselves and the name is associated with the self. Hence the letters of the name are preferred.\n";
+                oReport = "After calculating the most popular name of your preferred gender with " + initialtext + yearrange + ",\nwe are glad to tell you that the person " + GenderOutput(gender,preferredGender)+ " with the name: "+ result.sortedpeoplelist[0].name + " are more likely to become your soulmate! \n" + "According to the name-letter effect discovered in 1985 by the Belgian psychologist Jozef Nuttin,\npeople tends to prefer the letters in their name especially for their name initial over other letters in the alphabet.\nThis is because most people like themselves and the name is associated with the self. Hence the letters of the name are preferred.\n";
                 if (preferredInital.equals(String.valueOf(namestring.charAt(0)))){
                     imagestage.show();
                     oReport += "As you can see from the PopUp bar chart, groups with shared initials have higher group performance, collective efficacy and adaptive conflict ability.\nSince " + result.sortedpeoplelist[0].name + " shared the same name initial " + preferredInital + " with you, you two are born to become soulmate!\n";
