@@ -7,6 +7,35 @@ import static org.junit.Assert.*;
 
 public class Task5Test {
 
+
+    @Test
+    public void checkGenderOutputF() {
+        Task5 a = new Task5();
+        String output = a.GenderOutput("F","F");
+        assertTrue(output.equals("of the same gender"));
+    }
+
+    @Test
+    public void checkGenderOutputM() {
+        Task5 a = new Task5();
+        String output = a.GenderOutput("M","M");
+        assertTrue(output.equals("of the same gender"));
+    }
+
+    @Test
+    public void checkGenderOutputFM() {
+        Task5 a = new Task5();
+        String output = a.GenderOutput("F","M");
+        assertTrue(output.equals("of different gender"));
+    }
+
+    @Test
+    public void checkGenderOutputMF() {
+        Task5 a = new Task5();
+        String output = a.GenderOutput("M","F");
+        assertTrue(output.equals("of different gender"));
+    }
+
     @Test
     public void checkinputvalid() {
         Task5 a = new Task5();
