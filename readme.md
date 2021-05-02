@@ -31,3 +31,8 @@ Help Message for Task 5 | Help Message for Algorithm T5X1 | Help Message for Alg
 ![](./screenshots/T5_HelpT5.png) |  ![](./screenshots/T5_HelpT5X1.png) | ![](./screenshots/T5_HelpT5X2.png)
 
 ## Documentation:
+[Unit Testing Report](Documentation/test/index.html)
+
+[Coverage Test Report](Documentation/jacocoHTML/index.html)
+
+[JavaDoc Documentation](Documentation/javadoc/index.html)
