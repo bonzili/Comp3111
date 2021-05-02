@@ -15,11 +15,11 @@ Task 1 & Task 4
 ## Screenshots for Task 2:
 Summary | Error Handling | Custom Console Text size |
 :-------------------------:|:-------------------------:|:-------------------------:
-![](./screenshots/T2_Summary.PNG) |  ![](./screenshots/T2_ErrorHandling.PNG) | ![](./screenshots/T2_LargerConsoleText.PNG)
+![](./screenshots/T2_Summary.png) |  ![](./screenshots/T2_ErrorHandling.png) | ![](./screenshots/T2_LargerConsoleText.png)
 
 Result (Data Table) | Result (Bar Chart) | Result (Pie Chart) |
 :-------------------------:|:-------------------------:|:-------------------------:
-![](./screenshots/T2_DataTable.png) |  ![](./screenshots/T2_BarChart.png) | ![](./screenshots/T2_PieChart.PNG)
+![](./screenshots/T2_DataTable.png) |  ![](./screenshots/T2_BarChart.png) | ![](./screenshots/T2_PieChart.png)
 
 ## Screenshots for Task 5:
 Algorithm T5X1 | Algorithm T5X1 without initial input| Algorithm T5X1 with initial input |
