@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Task2.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">PopNames3111</a> &gt; <a href="index.source.html" class="el_package">comp3111.popnames</a> &gt; <span class="el_source">Task2.java</span></div><h1>Task2.java</h1><pre class="source lang-java linenums">package comp3111.popnames;
+
+import java.util.*;
+import javafx.application.Application;
+import javafx.scene.control.Button;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.print.PrinterJob;
+import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.commons.csv.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.scene.chart.*;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.geometry.Insets;
+import javafx.scene.input.MouseEvent;
+import edu.duke.*;
+import javax.swing.JOptionPane;
+
+
+class SortedPeopleList {
+	public int totaloccurrence;
+	public int totalfreq;
+	public int unipeople;
+	public People[] sortedpeoplelist;
+
+<span class="fc" id="L36">	public SortedPeopleList(){</span>
+<span class="fc" id="L37">		this.totaloccurrence = 0;</span>
+<span class="fc" id="L38">		this.totalfreq = 0;</span>
+<span class="fc" id="L39">		this.unipeople = 0;</span>
+<span class="fc" id="L40">	}</span>
+}
+
+class People{
+	public String name;
+	public int rank;
+	public int occurrence;
+	public int freq;
+
+<span class="fc" id="L49">	public People(String name, int rank, int occurrence) {</span>
+<span class="fc" id="L50">		this.name = name;</span>
+<span class="fc" id="L51">		this.rank = rank;</span>
+<span class="fc" id="L52">		this.occurrence = occurrence;</span>
+<span class="fc" id="L53">		this.freq = 1;</span>
+<span class="fc" id="L54">	}</span>
+
+	public void setName(String name) {
+<span class="fc" id="L57">		this.name = name;</span>
+<span class="fc" id="L58">	}</span>
+
+	public void setOccurrence(int occurrence) {
+<span class="fc" id="L61">		this.occurrence = occurrence;</span>
+<span class="fc" id="L62">	}</span>
+
+	public void setRank(int rank) {
+<span class="fc" id="L65">		this.rank = rank;</span>
+<span class="fc" id="L66">	}</span>
+
+	public static int compareOccurrence(People a , People b)
+	{
+<span class="fc bfc" id="L70" title="All 2 branches covered.">		if(a.occurrence &lt; b.occurrence)</span>
+<span class="fc" id="L71">			return 1;    //swap b before a</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">		else if (a.occurrence == b.occurrence)</span>
+<span class="fc" id="L73">			return a.name.compareTo(b.name); //check name instead</span>
+<span class="fc" id="L74">		return -1 ;</span>
+		//return b.occurrence - a.occurrence;
+		//return a.name.compareTo(b.name);
+	}
+}
+
+/**
+ * Task 2 - Generate a report in response to the queries on the K-th popular names over a given period.
+ * @author  Li Ho Yin
+ */
+<span class="fc" id="L84">public class Task2 {</span>
+
+
+	/**
+	 * Task 2 - Convert Cardinal value to ordinal value e.g. from 1 to 1-st. Used for console text output.
+	 * @param Cardinal the value of the cardinal value
+	 * @return Number in Ordinal value
+	 * @author  Li Ho Yin
+	 */
+	public static String ordinalConversion(int Cardinal){
+<span class="fc" id="L94">		String result = &quot;&quot;;</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">		if (Cardinal &lt;= 0){</span>
+<span class="fc" id="L96">			return null;</span>
+		}
+<span class="fc bfc" id="L98" title="All 4 branches covered.">		switch(Cardinal) {</span>
+			case 1:
+<span class="fc" id="L100">				result = &quot;1-st&quot;;</span>
+<span class="fc" id="L101">				break;</span>
+			case 2:
+<span class="fc" id="L103">				result = &quot;2-nd&quot;;</span>
+<span class="fc" id="L104">				break;</span>
+			case 3:
+<span class="fc" id="L106">				result = &quot;3-rd&quot;;</span>
+<span class="fc" id="L107">				break;</span>
+			default:
+<span class="fc" id="L109">				result = Cardinal + &quot;-th&quot;;</span>
+		}
+<span class="fc" id="L111">		return result;</span>
+	}
+	/**
+	 * Task 2 - Convert Gender from short form &quot;M/F&quot; to &quot;Male/Female&quot; . Used for console text output.
+	 * @param gender the short form of the gender
+	 * @return The full string of the gender.
+	 * @author  Li Ho Yin
+	 */
+	public static String Gender(String gender){
+<span class="fc bfc" id="L120" title="All 2 branches covered.">		if (gender.equals(&quot;M&quot;)){</span>
+<span class="fc" id="L121">			return &quot;Male&quot;;</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">		}else if (gender.equals(&quot;F&quot;)){</span>
+<span class="fc" id="L123">			return &quot;Female&quot;;</span>
+		}
+<span class="fc" id="L125">		return null;</span>
+	}
+
+	/**
+	 * Task 2 - Convert Gender from short form &quot;M/F&quot; to &quot;boys/girls&quot; . Used for console text output.
+	 * @param gender the short form of the gender
+	 * @return The full string of the gender.
+	 * @author  Li Ho Yin
+	 */
+	public static String Genderbaby(String gender){
+<span class="fc bfc" id="L135" title="All 2 branches covered.">		if (gender.equals(&quot;M&quot;)){</span>
+<span class="fc" id="L136">			return &quot;boys&quot;;</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">		}else if (gender.equals(&quot;F&quot;)){</span>
+<span class="fc" id="L138">			return &quot;girls&quot;;</span>
+		}
+<span class="fc" id="L140">		return null;</span>
+	}
+
+	public static CSVParser getFileParser(int year) {
+<span class="fc" id="L144">     FileResource fr = new FileResource(String.format(&quot;dataset/yob%s.csv&quot;, year));</span>
+<span class="fc" id="L145">     return fr.getCSVParser(false);</span>
+	}
+
+	/**
+	 * Task 2 - Display a PopUp Message displaying the error.
+	 * @param error The error field
+	 * @param extra The extra error message
+	 * @author  Li Ho Yin
+	 */
+	public static void popupMessage(String error,String extra) {
+<span class="fc" id="L155">		JOptionPane.showMessageDialog(null,</span>
+			    &quot;Please enter a valid &quot; + error + &quot;! &quot; + extra,
+			    &quot;Input Error&quot;,
+			    JOptionPane.WARNING_MESSAGE);
+<span class="fc" id="L159">	}</span>
+
+
+	/**
+	 * Task 2 - Ensure that the input is valid by checking their type and range.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return A boolean value showing the input is valid or not
+	 * @author  Li Ho Yin
+	 */
+	public static boolean checkinputvalid(String yearstartstring, String yearendstring, String kstring, String gender) {
+<span class="fc" id="L172">		boolean valid = true;</span>
+<span class="fc" id="L173">		String integeronly = &quot;It only accept an integer value.&quot;;</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">		if (!(yearstartstring.matches(&quot;^[0-9]*$&quot;))){</span>
+<span class="fc" id="L175">			popupMessage(&quot;Starting Year&quot;,integeronly);</span>
+<span class="fc" id="L176">			valid = false;</span>
+		}
+<span class="fc bfc" id="L178" title="All 2 branches covered.">		if (!(yearendstring.matches(&quot;^[0-9]*$&quot;))){</span>
+<span class="fc" id="L179">			popupMessage(&quot;Ending Year&quot;,integeronly);</span>
+<span class="fc" id="L180">			valid = false;</span>
+		}
+<span class="fc bfc" id="L182" title="All 2 branches covered.">		if (!(kstring.matches(&quot;^[0-9]*$&quot;))){</span>
+<span class="fc" id="L183">			popupMessage(&quot;Rank K&quot;,integeronly);</span>
+<span class="fc" id="L184">			valid = false;</span>
+		}
+<span class="fc bfc" id="L186" title="All 2 branches covered.">		if (valid) {</span>
+<span class="fc" id="L187">		 	int yearstart = Integer.parseInt(yearstartstring);</span>
+<span class="fc" id="L188">		    int yearend = Integer.parseInt(yearendstring);</span>
+<span class="fc" id="L189">		    int k = Integer.parseInt(kstring);</span>
+			 
+<span class="pc bpc" id="L191" title="1 of 4 branches missed.">			 if (yearstart &lt; 1880 || yearstart &gt; 2019) {</span>
+<span class="fc" id="L192">				popupMessage(&quot;Starting Year&quot;,&quot;Its range can only be 1880-2019.&quot;);</span>
+<span class="fc" id="L193">				valid = false;</span>
+			 }
+<span class="pc bpc" id="L195" title="1 of 4 branches missed.">			 if (yearend &lt; 1880 || yearend &gt; 2019) {</span>
+<span class="fc" id="L196">				popupMessage(&quot;Ending Year&quot;,&quot;Its range can only be 1880-2019.&quot;);</span>
+<span class="fc" id="L197">				valid = false;</span>
+			 }
+<span class="fc bfc" id="L199" title="All 2 branches covered.">			 if (yearend &lt; yearstart) {</span>
+<span class="fc" id="L200">				popupMessage(&quot;Starting Year and Ending Year&quot;,&quot;Ending Year must be larger or equal to the Starting Year.&quot;);</span>
+<span class="fc" id="L201">				valid = false;</span>
+			 }
+<span class="pc bpc" id="L203" title="1 of 4 branches missed.">			 if (k &lt; 1 || k &gt; 1000) {</span>
+<span class="fc" id="L204">				popupMessage(&quot;Rank K&quot;,&quot;Its range can only be 1-1000.&quot;);</span>
+<span class="fc" id="L205">				valid = false;</span>
+			 }
+<span class="pc bpc" id="L207" title="3 of 4 branches missed.">			if (!(gender.matches(&quot;^[MF]$&quot;) || gender == null)){</span>
+<span class="nc" id="L208">				popupMessage(&quot;Gender&quot;,&quot;Please choose the value 'M' or 'F' in the selection box.&quot;);</span>
+<span class="nc" id="L209">				valid = false;</span>
+			}
+		}
+<span class="fc" id="L212">		return valid;</span>
+	}
+
+	/**
+	 * Task 2 - Search for the people in the databases base on the year, gender and rank.
+	 * @param year The year wanted to check
+	 * @param gender Gender value
+	 * @param rank Rank K value
+	 * @return The people with the rank and gender as requested
+	 * @author  Li Ho Yin
+	 */
+	public static People getPeople(int year, int rank, String gender) {
+<span class="fc" id="L224">		boolean found = false;</span>
+<span class="fc" id="L225">		People people= new People(&quot;&quot;,0,0);</span>
+<span class="fc" id="L226">		int currentRank = 0;</span>
+
+		// For every name entry in the CSV file
+<span class="fc bfc" id="L229" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(year)) {</span>
+			// Get its rank if gender matches param
+<span class="fc bfc" id="L231" title="All 2 branches covered.">			if (rec.get(1).equals(gender)) {</span>
+				// Get the name whose rank matches param
+<span class="fc" id="L233">				currentRank++;</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">				if (currentRank == rank) {</span>
+<span class="fc" id="L235">					found = true;</span>
+<span class="fc" id="L236">					people.setName(rec.get(0));</span>
+<span class="fc" id="L237">					people.setRank(currentRank);</span>
+<span class="fc" id="L238">					people.setOccurrence(Integer.parseInt(rec.get(2)));</span>
+<span class="fc" id="L239">					break;</span>
+				}
+			}
+<span class="fc" id="L242">		}</span>
+		//System.out.println(year);
+<span class="fc bfc" id="L244" title="All 2 branches covered.">		if (found)</span>
+<span class="fc" id="L245">			return people;</span>
+		else
+		{
+<span class="fc" id="L248">			JOptionPane.showMessageDialog(null,</span>
+					&quot;Please try to search for another value. &quot; + &quot;No name can be found in rank &quot;+ rank + &quot; in year &quot; + year + &quot;.&quot;,
+					&quot;Database Error&quot;,
+					JOptionPane.WARNING_MESSAGE);
+<span class="fc" id="L252">			return null;</span>
+		}
+	}
+
+	/**
+	 * Task 2 - Sort the people list by the reverse order of occurrences and if two names have the same occurrences, they will be sorted by their name alphabetically.
+	 * @param peoplelist an unsorted people list
+	 * @return A sorted people list with extra info e.g. total occurrences, number of unique person
+	 * @author  Li Ho Yin
+	 */
+	public static SortedPeopleList sortPeople(People[] peoplelist){
+<span class="fc" id="L263">		SortedPeopleList result = new SortedPeopleList();</span>
+<span class="fc" id="L264">		result.totalfreq = peoplelist.length;</span>
+<span class="fc" id="L265">		People[] templist = new People[peoplelist.length];</span>
+<span class="fc" id="L266">		Set&lt;String&gt; listname = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">		for (int i = 0; i &lt; peoplelist.length; i++){</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">			if (!listname.contains(peoplelist[i].name)){</span>
+<span class="fc" id="L269">				templist[result.unipeople] = peoplelist[i];</span>
+<span class="fc" id="L270">				listname.add(peoplelist[i].name);</span>
+<span class="fc" id="L271">				result.unipeople ++;</span>
+			}else{
+<span class="fc bfc" id="L273" title="All 2 branches covered.">				for (int k = 0; k &lt; result.unipeople; k++){</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">					if (templist[k].name.equals(peoplelist[i].name)){</span>
+<span class="fc" id="L275">						templist[k].occurrence += peoplelist[i].occurrence;</span>
+<span class="fc" id="L276">						templist[k].freq += 1;</span>
+					}
+				}
+			}
+<span class="fc" id="L280">			result.totaloccurrence += peoplelist[i].occurrence;</span>
+		}
+<span class="fc" id="L282">		People[] realArray = new People[result.unipeople];</span>
+<span class="fc" id="L283">		System.arraycopy(templist, 0, realArray, 0, result.unipeople);</span>
+<span class="fc" id="L284">		result.sortedpeoplelist = realArray;</span>
+<span class="fc" id="L285">		Arrays.sort(result.sortedpeoplelist, People::compareOccurrence);</span>
+<span class="fc" id="L286">		return result;</span>
+	}
+
+
+	/**
+	 * Task 2 -  Generate the output used for displaying charts and data tables.
+	 * @param yearstart Starting Year
+	 * @param yearend Ending Year
+	 * @param k Rank K
+	 * @param gender Gender
+	 * @return A sorted people list with extra info e.g. total occurrences, number of unique person
+	 * @author  Li Ho Yin
+	 */
+	public static SortedPeopleList generateOutput(int yearstart, int yearend, int k, String gender){
+<span class="fc" id="L300">		People[] peoplelist = new People[yearend-yearstart+1];</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">		for (int i = 0; i &lt; yearend-yearstart+1 ;i++){</span>
+<span class="fc" id="L302">			People temp = getPeople(yearstart+i,k,gender);</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">			if (temp != null){</span>
+<span class="fc" id="L304">				peoplelist[i] = temp;</span>
+			}else{
+<span class="fc" id="L306">				return null;</span>
+			}
+		}
+<span class="fc" id="L309">		SortedPeopleList output = sortPeople(peoplelist);</span>
+<span class="fc" id="L310">		return output;</span>
+	}
+
+	/**
+	 * Task 2 - A temporarily person class used for sorting
+	 * @author  Li Ho Yin
+	 */
+	public static class Person {
+
+		/**
+		 * Task 2 - The name of the temporarily person
+		 */
+		public final SimpleStringProperty Name;
+
+		/**
+		 * Task 2 - The frequency of the temporarily person
+		 */
+		public final SimpleStringProperty Freq;
+
+		/**
+		 * Task 2 - The occurrences of the temporarily person
+		 */
+		public final SimpleStringProperty Occurrences;
+
+		/**
+		 * Task 2 - The percentage of the temporarily person existed
+		 */
+		public final SimpleStringProperty Percentage;
+
+
+		/**
+		 * Task 2 - Constructor for the temporarily person
+		 * @param Name The name of the temporarily person
+		 * @param freq The frequency of the temporarily person
+		 * @param occurrences The occurrences of the temporarily person
+		 * @param percentage The percentage of the temporarily person
+		 */
+<span class="fc" id="L347">		public Person(String Name, int freq, int occurrences, String percentage) {</span>
+<span class="fc" id="L348">			this.Name = new SimpleStringProperty(Name);</span>
+<span class="fc" id="L349">			this.Freq = new SimpleStringProperty(String.valueOf(freq));</span>
+<span class="fc" id="L350">			this.Occurrences = new SimpleStringProperty(String.valueOf(occurrences));</span>
+<span class="fc" id="L351">			this.Percentage = new SimpleStringProperty(percentage+&quot;%&quot;);</span>
+<span class="fc" id="L352">		}</span>
+
+		/**
+		 * Task 2 - Get the name of the temporarily person
+		 * @return  The name of the person
+		 * @author  Li Ho Yin
+		 */
+		public String getName() {
+<span class="fc" id="L360">			return Name.get();</span>
+		}
+
+		/**
+		 * Task 2 - Set the name of the temporarily person
+		 * @param Name The name wanted to set
+		 * @author  Li Ho Yin
+		 */
+		public void setName(String Name) {
+<span class="nc" id="L369">			this.Name.set(Name);</span>
+<span class="nc" id="L370">		}</span>
+
+		/**
+		 * Task 2 - Get the frequency of the temporarily person
+		 * @return  The frequency of the person existed
+		 * @author  Li Ho Yin
+		 */
+		public String getFreq() {
+<span class="fc" id="L378">			return Freq.get();</span>
+		}
+
+		/**
+		 * Task 2 - Set the frequency of the temporarily person
+		 * @param frequency The frequency wanted to set
+		 * @author  Li Ho Yin
+		 */
+		public void setFreq(String frequency) {
+<span class="nc" id="L387">			this.Freq.set(frequency);</span>
+<span class="nc" id="L388">		}</span>
+
+		/**
+		 * Task 2 - Get the occurrences of the temporarily person
+		 * @return  The occurrences of the person
+		 * @author  Li Ho Yin
+		 */
+		public String getOccurrences() {
+<span class="fc" id="L396">			return Occurrences.get();</span>
+		}
+
+		/**
+		 * Task 2 - Set the occurrences of the temporarily person
+		 * @param Occurrences The occurrences wanted to set
+		 * @author  Li Ho Yin
+		 */
+		public void setOccurrences(String Occurrences) {
+<span class="nc" id="L405">			this.Occurrences.set(Occurrences);</span>
+<span class="nc" id="L406">		}</span>
+
+		/**
+		 * Task 2 - Get the percentage of the temporarily person
+		 * @return  The percentage of the person existed
+		 * @author  Li Ho Yin
+		 */
+		public String getPercentage() {
+<span class="fc" id="L414">			return Percentage.get();</span>
+		}
+
+		/**
+		 * Task 2 - Set the percentage of the temporarily person
+		 * @param percentage The percentage wanted to set
+		 * @author  Li Ho Yin
+		 */
+		public void setPercentage(String percentage) {
+<span class="nc" id="L423">			this.Percentage.set(percentage);</span>
+<span class="nc" id="L424">		}</span>
+
+	}
+
+	/**
+	 * Task 2 - Compute the result of the k-th popular name over the year in a data table.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return Console String and a PopUp window of a data table
+	 * @author  Li Ho Yin
+	 */
+	public static String getDataTableT2(String yearstartstring, String yearendstring, String kstring, String gender) {
+<span class="fc" id="L438">		String oReport = &quot;&quot;;</span>
+<span class="pc bpc" id="L439" title="1 of 2 branches missed.">		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {</span>
+<span class="fc" id="L440">			int yearstart = Integer.parseInt(yearstartstring);</span>
+<span class="fc" id="L441">			int yearend = Integer.parseInt(yearendstring);</span>
+<span class="fc" id="L442">			int k = Integer.parseInt(kstring);</span>
+<span class="fc" id="L443">			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);</span>
+<span class="pc bpc" id="L444" title="1 of 2 branches missed.">			if (result == null){</span>
+<span class="nc" id="L445">				return &quot;Error. The result cannot be generated.&quot;;</span>
+			}
+
+<span class="fc" id="L448">			TableView&lt;Person&gt; table = new TableView&lt;Person&gt;();</span>
+
+<span class="fc" id="L450">			ObservableList&lt;Person&gt; data = FXCollections.observableArrayList();</span>
+<span class="fc bfc" id="L451" title="All 2 branches covered.">			for (People ppl : result.sortedpeoplelist) {</span>
+<span class="fc" id="L452">				data.add(new Person(ppl.name, ppl.freq, ppl.occurrence, String.format(&quot;%.1f&quot;,(double)ppl.occurrence/result.totaloccurrence * 100 )));</span>
+			}
+
+<span class="fc" id="L455">			Stage stage = new Stage();</span>
+<span class="fc" id="L456">			Scene scene = new Scene(new Group());</span>
+<span class="fc" id="L457">			stage.setTitle(&quot;Data table&quot;);</span>
+<span class="fc" id="L458">			stage.setWidth(450);</span>
+<span class="fc" id="L459">			stage.setHeight(550);</span>
+
+<span class="fc" id="L461">			final Label label = new Label(ordinalConversion(k) + &quot; Popular &quot; + Gender(gender) + &quot; Names between &quot; + yearstartstring + &quot; to &quot; + yearendstring);</span>
+<span class="fc" id="L462">			label.setFont(new Font(&quot;Arial&quot;, 18));</span>
+
+<span class="fc" id="L464">			table.setEditable(false);</span>
+
+<span class="fc" id="L466">			TableColumn NameCol = new TableColumn(&quot;Name&quot;);</span>
+<span class="fc" id="L467">			NameCol.setMinWidth(100);</span>
+<span class="fc" id="L468">			NameCol.setStyle( &quot;-fx-alignment: CENTER;&quot;);</span>
+<span class="fc" id="L469">			NameCol.setCellValueFactory(new PropertyValueFactory&lt;Person, String&gt;(&quot;Name&quot;));</span>
+
+<span class="fc" id="L471">			TableColumn FreqCol = new TableColumn(&quot;Frequency&quot;);</span>
+<span class="fc" id="L472">			FreqCol.setMinWidth(100);</span>
+<span class="fc" id="L473">			FreqCol.setStyle( &quot;-fx-alignment: CENTER;&quot;);</span>
+<span class="fc" id="L474">			FreqCol.setCellValueFactory(new PropertyValueFactory&lt;Person, String&gt;(&quot;Freq&quot;));</span>
+
+<span class="fc" id="L476">			TableColumn OccurCol = new TableColumn(&quot;Occurrences&quot;);</span>
+<span class="fc" id="L477">			OccurCol.setMinWidth(100);</span>
+<span class="fc" id="L478">			OccurCol.setStyle( &quot;-fx-alignment: CENTER;&quot;);</span>
+<span class="fc" id="L479">			OccurCol.setCellValueFactory(new PropertyValueFactory&lt;Person, String&gt;(&quot;Occurrences&quot;));</span>
+
+<span class="fc" id="L481">			TableColumn PercentCol = new TableColumn(&quot;Percentage&quot;);</span>
+<span class="fc" id="L482">			PercentCol.setMinWidth(100);</span>
+<span class="fc" id="L483">			PercentCol.setStyle( &quot;-fx-alignment: CENTER;&quot;);</span>
+<span class="fc" id="L484">			PercentCol.setCellValueFactory(new PropertyValueFactory&lt;Person, String&gt;(&quot;Percentage&quot;));</span>
+
+<span class="fc" id="L486">			table.setItems(data);</span>
+<span class="fc" id="L487">			table.getColumns().addAll(NameCol,FreqCol,OccurCol,PercentCol);</span>
+
+<span class="fc" id="L489">			final VBox vbox = new VBox();</span>
+<span class="fc" id="L490">			vbox.setSpacing(5);</span>
+<span class="fc" id="L491">			vbox.setPadding(new Insets(10, 0, 0, 10));</span>
+
+<span class="fc" id="L493">			final Label total = new Label(&quot;Total:&quot;);</span>
+<span class="fc" id="L494">			total.setFont(new Font(&quot;Arial&quot;, 20));</span>
+<span class="fc" id="L495">			total.setTranslateX(35);</span>
+<span class="fc" id="L496">			total.setTranslateY(440);</span>
+
+<span class="fc" id="L498">			Label totalfreq = new Label(String.valueOf(result.totalfreq));</span>
+<span class="fc" id="L499">			totalfreq.setFont(new Font(&quot;Arial&quot;, 20));</span>
+<span class="fc" id="L500">			totalfreq.setTranslateX(155);</span>
+<span class="fc" id="L501">			totalfreq.setTranslateY(440);</span>
+
+<span class="fc" id="L503">			Label totaloccur = new Label(String.valueOf(result.totaloccurrence));</span>
+<span class="fc" id="L504">			totaloccur.setFont(new Font(&quot;Arial&quot;, 20));</span>
+<span class="fc" id="L505">			totaloccur.setTranslateX(220);</span>
+<span class="fc" id="L506">			totaloccur.setTranslateY(440);</span>
+
+<span class="fc" id="L508">			Label totalpercent = new Label(&quot;100.0%&quot;);</span>
+<span class="fc" id="L509">			totalpercent.setFont(new Font(&quot;Arial&quot;, 20));</span>
+<span class="fc" id="L510">			totalpercent.setTranslateX(330);</span>
+<span class="fc" id="L511">			totalpercent.setTranslateY(440);</span>
+
+<span class="fc" id="L513">			vbox.getChildren().addAll(label, table);</span>
+<span class="fc" id="L514">			Button btn = new Button(&quot;Print/Export to PDF&quot;);</span>
+<span class="fc" id="L515">			btn.setStyle(&quot;-fx-font: 18 arial; -fx-base: #b6e7c9;&quot;);</span>
+<span class="fc" id="L516">			btn.setLayoutX(125);</span>
+<span class="fc" id="L517">			btn.setLayoutY(470);</span>
+<span class="fc" id="L518">			btn.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+
+				@Override
+				public void handle(ActionEvent event) {
+<span class="nc" id="L522">					System.out.println(&quot;To Printer!&quot;);</span>
+<span class="nc" id="L523">					PrinterJob job = PrinterJob.createPrinterJob();</span>
+<span class="nc bnc" id="L524" title="All 2 branches missed.">					if(job != null){</span>
+<span class="nc" id="L525">						job.showPrintDialog(stage);</span>
+<span class="nc" id="L526">						job.printPage(vbox);</span>
+<span class="nc" id="L527">						job.endJob();</span>
+					}
+<span class="nc" id="L529">				}</span>
+			});
+<span class="fc" id="L531">			((Group) scene.getRoot()).getChildren().addAll(vbox,total,totalfreq,totaloccur,totalpercent,btn);</span>
+
+<span class="fc" id="L533">			stage.setScene(scene);</span>
+<span class="fc" id="L534">			stage.show();</span>
+<span class="fc" id="L535">			oReport = &quot;A PopUp window is displayed showing a data table of the &quot; + label.getText() + &quot;.\nYou can click on the header of different column to arrange the data differently. \nDefault arragement: Arraged by the reverse order of occurrences. \nIf names with the occurrences are tied, they are sorted and presented in alphabetical order.&quot;;</span>
+		}
+<span class="fc" id="L537">		 return oReport;</span>
+	 }
+
+
+	/**
+	 * Task 2 - Compute the result of the k-th popular name over the year in a Bar Chart.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return Console String and a PopUp window of a Bar Chart
+	 * @author  Li Ho Yin
+	 */
+	public static String getBarChartT2(String yearstartstring, String yearendstring, String kstring, String gender) {
+<span class="fc" id="L551">		String oReport = &quot;&quot;;</span>
+<span class="pc bpc" id="L552" title="1 of 2 branches missed.">		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {</span>
+<span class="fc" id="L553">			int yearstart = Integer.parseInt(yearstartstring);</span>
+<span class="fc" id="L554">			int yearend = Integer.parseInt(yearendstring);</span>
+<span class="fc" id="L555">			int k = Integer.parseInt(kstring);</span>
+<span class="fc" id="L556">			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);</span>
+<span class="pc bpc" id="L557" title="1 of 2 branches missed.">			if (result == null){</span>
+<span class="nc" id="L558">				return &quot;Error&quot;;</span>
+			}
+
+<span class="fc" id="L561">			Stage stage = new Stage();</span>
+<span class="fc" id="L562">			stage.setTitle(&quot;Bar Chart&quot;);</span>
+<span class="fc" id="L563">			final CategoryAxis xAxis = new CategoryAxis();</span>
+<span class="fc" id="L564">			final NumberAxis yAxis = new NumberAxis();</span>
+<span class="fc" id="L565">			final BarChart&lt;String, Number&gt; bc =</span>
+					new BarChart&lt;String, Number&gt;(xAxis, yAxis);
+<span class="fc" id="L567">			bc.setTitle(ordinalConversion(k) + &quot; Popular &quot; + Gender(gender) + &quot; Names between &quot; + yearstartstring + &quot; to &quot; + yearendstring);</span>
+<span class="fc" id="L568">			xAxis.setLabel(&quot;Name&quot;);</span>
+<span class="fc" id="L569">			yAxis.setLabel(&quot;Occurrences&quot;);</span>
+<span class="fc" id="L570">			XYChart.Series series1 = new XYChart.Series();</span>
+<span class="fc" id="L571">			series1.setName(yearstartstring + &quot; to &quot; + yearendstring);</span>
+
+<span class="fc" id="L573">			final Label caption = new Label(&quot;&quot;);</span>
+<span class="fc" id="L574">			caption.setTextFill(Color.BLACK);</span>
+<span class="fc" id="L575">			caption.setStyle(&quot;-fx-font: 24 arial;&quot;);</span>
+<span class="fc bfc" id="L576" title="All 2 branches covered.">			for (People ppl : result.sortedpeoplelist) {</span>
+<span class="fc" id="L577">				series1.getData().add(new XYChart.Data(ppl.name, ppl.occurrence));</span>
+			}
+
+			//for better UI
+<span class="pc bpc" id="L581" title="1 of 2 branches missed.">			if (result.unipeople == 1){</span>
+<span class="nc" id="L582">				bc.setCategoryGap(300);</span>
+<span class="pc bpc" id="L583" title="1 of 2 branches missed.">			} else if(result.unipeople == 2){</span>
+<span class="nc" id="L584">				bc.setCategoryGap(50);</span>
+			}
+
+<span class="fc" id="L587">			Label reminder = new Label(&quot;*You can click on the corresponding bar \nand the exact value will be displayed.*&quot;);</span>
+<span class="fc" id="L588">			reminder.setTextFill(Color.GRAY);</span>
+<span class="fc" id="L589">			reminder.setStyle(&quot;-fx-font: 16 arial;&quot;);</span>
+<span class="fc" id="L590">			reminder.setTranslateX(20);</span>
+<span class="fc" id="L591">			reminder.setTranslateY(400);</span>
+
+<span class="fc" id="L593">			Group root = new Group();</span>
+<span class="fc" id="L594">			Button btn = new Button(&quot;Print/Export to PDF&quot;);</span>
+<span class="fc" id="L595">			btn.setStyle(&quot;-fx-font: 18 arial; -fx-base: #b6e7c9;&quot;);</span>
+<span class="fc" id="L596">			btn.setLayoutX(140);</span>
+<span class="fc" id="L597">			btn.setLayoutY(460);</span>
+<span class="fc" id="L598">			btn.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+
+				@Override
+				public void handle(ActionEvent event) {
+<span class="nc" id="L602">					System.out.println(&quot;To Printer!&quot;);</span>
+<span class="nc" id="L603">					PrinterJob job = PrinterJob.createPrinterJob();</span>
+<span class="nc bnc" id="L604" title="All 2 branches missed.">					if(job != null){</span>
+<span class="nc" id="L605">						job.showPrintDialog(stage);</span>
+<span class="nc" id="L606">						job.printPage(root);</span>
+<span class="nc" id="L607">						job.endJob();</span>
+					}
+<span class="nc" id="L609">				}</span>
+			});
+<span class="fc" id="L611">			root.getChildren().addAll(bc,caption,reminder,btn);</span>
+
+<span class="fc" id="L613">			Scene scene = new Scene(root, 500, 500);</span>
+
+<span class="fc" id="L615">			bc.getData().addAll(series1);</span>
+
+<span class="fc bfc" id="L617" title="All 2 branches covered.">			for (XYChart.Series&lt;String,Number&gt; serie: bc.getData()){</span>
+<span class="fc bfc" id="L618" title="All 2 branches covered.">				for (XYChart.Data&lt;String, Number&gt; item: serie.getData()){</span>
+<span class="fc" id="L619">					item.getNode().setOnMousePressed((MouseEvent event) -&gt; {</span>
+						//System.out.println(item.toString());
+<span class="nc" id="L621">						caption.setTranslateX(event.getSceneX());</span>
+<span class="nc" id="L622">						caption.setTranslateY(event.getSceneY());</span>
+<span class="nc" id="L623">						caption.setText(String.valueOf(item.getYValue()));</span>
+<span class="nc" id="L624">					});</span>
+<span class="fc" id="L625">				}</span>
+<span class="fc" id="L626">			}</span>
+
+<span class="fc" id="L628">			stage.setScene(scene);</span>
+<span class="fc" id="L629">			stage.show();</span>
+<span class="fc" id="L630">			oReport = &quot;A PopUp window is displayed showing a bar chart of the &quot; + bc.getTitle() + &quot;. \nEach name is associated with a bar representing the frequency of having hold the &quot;+ ordinalConversion(k) +&quot; rank. \nThe longer the bar, the more often the name has been ranked at &quot;+ ordinalConversion(k)+&quot;.\nYou can click on the corresponding bar to display the exact value of the bar.&quot;;</span>
+
+		}
+<span class="fc" id="L633">		return oReport;</span>
+	 }
+
+	/**
+	 * Task 2 - Compute the result of the k-th popular name over the year in a Pie Chart.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return Console String and a PopUp window of a Pie Chart
+	 * @author  Li Ho Yin
+	 */
+	public static String getPieChartT2(String yearstartstring, String yearendstring, String kstring, String gender) {
+<span class="fc" id="L646">		String oReport = &quot;&quot;;</span>
+<span class="pc bpc" id="L647" title="1 of 2 branches missed.">		if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {</span>
+<span class="fc" id="L648">			int yearstart = Integer.parseInt(yearstartstring);</span>
+<span class="fc" id="L649">			int yearend = Integer.parseInt(yearendstring);</span>
+<span class="fc" id="L650">			int k = Integer.parseInt(kstring);</span>
+<span class="fc" id="L651">			SortedPeopleList result = generateOutput(yearstart, yearend, k, gender);</span>
+<span class="pc bpc" id="L652" title="1 of 2 branches missed.">			if (result == null){</span>
+<span class="nc" id="L653">				return &quot;Error&quot;;</span>
+			}
+<span class="fc" id="L655">			Stage stage = new Stage();</span>
+<span class="fc" id="L656">			Scene scene = new Scene(new Group());</span>
+<span class="fc" id="L657">			stage.setTitle(&quot;Pie Chart&quot;);</span>
+<span class="fc" id="L658">			stage.setWidth(500);</span>
+<span class="fc" id="L659">			stage.setHeight(550);</span>
+<span class="fc" id="L660">			ObservableList&lt;PieChart.Data&gt; pieChartData = FXCollections.observableArrayList();</span>
+<span class="fc bfc" id="L661" title="All 2 branches covered.">			for (People ppl : result.sortedpeoplelist) {</span>
+<span class="fc" id="L662">				pieChartData.add(new PieChart.Data(ppl.name,ppl.occurrence));</span>
+			}
+
+<span class="fc" id="L665">			final PieChart chart = new PieChart(pieChartData);</span>
+<span class="fc" id="L666">			chart.setTitle(ordinalConversion(k) + &quot; Popular &quot; + Gender(gender) + &quot; Names between &quot; + yearstartstring + &quot; to &quot; + yearendstring);</span>
+<span class="fc" id="L667">			final Label caption = new Label(&quot;&quot;);</span>
+<span class="fc" id="L668">			caption.setTextFill(Color.BLACK);</span>
+<span class="fc" id="L669">			caption.setStyle(&quot;-fx-font: 24 arial;&quot;);</span>
+
+<span class="fc bfc" id="L671" title="All 2 branches covered.">			for (final PieChart.Data data : chart.getData()) {</span>
+<span class="fc" id="L672">				data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,</span>
+<span class="fc" id="L673">						new EventHandler&lt;MouseEvent&gt;() {</span>
+							@Override public void handle(MouseEvent e) {
+<span class="nc" id="L675">								caption.setTranslateX(e.getSceneX());</span>
+<span class="nc" id="L676">								caption.setTranslateY(e.getSceneY());</span>
+<span class="nc" id="L677">								caption.setText(String.format(&quot;%.2f&quot;,(double)data.getPieValue()/result.totaloccurrence*100)</span>
+										+ &quot;%&quot;);
+<span class="nc" id="L679">							}</span>
+						});
+<span class="fc" id="L681">			}</span>
+<span class="fc" id="L682">			Label reminder = new Label(&quot;*You can click on the corresponding slice \nand the value will be displayed.(Rounded down to 2 d.p.)*&quot;);</span>
+<span class="fc" id="L683">			reminder.setTextFill(Color.GRAY);</span>
+<span class="fc" id="L684">			reminder.setStyle(&quot;-fx-font: 16 arial;&quot;);</span>
+<span class="fc" id="L685">			reminder.setTranslateX(20);</span>
+<span class="fc" id="L686">			reminder.setTranslateY(400);</span>
+
+<span class="fc" id="L688">			Button btn = new Button(&quot;Print/Export to PDF&quot;);</span>
+<span class="fc" id="L689">			btn.setStyle(&quot;-fx-font: 18 arial; -fx-base: #b6e7c9;&quot;);</span>
+<span class="fc" id="L690">			btn.setLayoutX(137);</span>
+<span class="fc" id="L691">			btn.setLayoutY(470);</span>
+<span class="fc" id="L692">			btn.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+
+				@Override
+				public void handle(ActionEvent event) {
+<span class="nc" id="L696">					System.out.println(&quot;To Printer!&quot;);</span>
+<span class="nc" id="L697">					PrinterJob job = PrinterJob.createPrinterJob();</span>
+<span class="nc bnc" id="L698" title="All 2 branches missed.">					if(job != null){</span>
+<span class="nc" id="L699">						job.showPrintDialog(stage);</span>
+<span class="nc" id="L700">						job.printPage(scene.getRoot());</span>
+<span class="nc" id="L701">						job.endJob();</span>
+					}
+<span class="nc" id="L703">				}</span>
+			});
+
+<span class="fc" id="L706">			((Group) scene.getRoot()).getChildren().addAll(chart, caption,reminder,btn);</span>
+<span class="fc" id="L707">			stage.setScene(scene);</span>
+<span class="fc" id="L708">			stage.show();</span>
+
+<span class="fc" id="L710">			oReport = &quot;A PopUp window is displayed showing a pie chart of the &quot; + chart.getTitle() + &quot;. \nEach name is shown as a sector in the chart representing the associated frequencty of having hold the &quot;+ ordinalConversion(k) +&quot; rank. \nThe bigger the sector, the more often the name has been ranked at &quot;+ ordinalConversion(k)+&quot;.\nYou can click on the corresponding slice to display the value of the slice.&quot;;</span>
+
+		}
+<span class="fc" id="L713">		 return oReport;</span>
+	 }
+
+	/**
+	 * Task 2 - Compute the result of the k-th popular name over the year in text form.
+	 * @param yearendstring String inputted for Ending Year
+	 * @param yearstartstring String inputted for Starting Year
+	 * @param kstring String inputted for Rank K
+	 * @param gender String inputted for gender
+	 * @return Console String
+	 * @author  Li Ho Yin
+	 */
+	 public static String getSummaryT2(String yearstartstring, String yearendstring, String kstring, String gender) {
+<span class="fc" id="L726">		 String oReport = &quot;&quot;;</span>
+<span class="pc bpc" id="L727" title="1 of 2 branches missed.">		 if (checkinputvalid(yearstartstring,yearendstring, kstring, gender)) {</span>
+<span class="fc" id="L728">		 	int yearstart = Integer.parseInt(yearstartstring);</span>
+<span class="fc" id="L729">		 	int yearend = Integer.parseInt(yearendstring);</span>
+<span class="fc" id="L730">		 	int k = Integer.parseInt(kstring);</span>
+<span class="fc" id="L731">		 	SortedPeopleList result = generateOutput(yearstart,yearend,k,gender);</span>
+<span class="pc bpc" id="L732" title="1 of 2 branches missed.">		 	if (result == null){</span>
+<span class="nc" id="L733">		 		return &quot;Error&quot;;</span>
+			}
+<span class="fc" id="L735">			People toppeople = result.sortedpeoplelist[0];</span>
+<span class="fc" id="L736">			oReport = toppeople.name + &quot; has hold the &quot; + ordinalConversion(k) + &quot; rank most often for a total of &quot; + toppeople.freq + &quot; times among \nnames registered for baby &quot; + Genderbaby(gender) + &quot; born in the period from &quot; + yearstartstring + &quot; to &quot; + yearendstring + &quot;.\n&quot;;</span>
+<span class="fc" id="L737">			oReport += &quot;The total number of occurrences of &quot; + toppeople.name + &quot; is &quot; + toppeople.occurrence + &quot;, which represents \n&quot; + String.format(&quot;%.2f&quot;,(double)toppeople.occurrence/result.totaloccurrence * 100) + &quot;% of total &quot; + Gender(gender) + &quot; births at the &quot; + ordinalConversion(k) + &quot; rank in the period from &quot; + yearstartstring + &quot; to &quot; + yearendstring + &quot;.&quot;;</span>
+			
+			 //Jessica has hold the 8-th rank most often for a total of 4 timesamong names registered for baby girls born in the period from 2000 to 2010.
+			 //The total number of occurrences of Jessica is 1592, which represents 36.4% of total female births at the 8-th rank in the period from 2000 to 2010.
+		 	// for (int i = 0; i &lt; result.unipeople; i++){
+		 	// 	oReport = oReport + result.sortedpeoplelist[i].name + &quot;:&quot; + result.sortedpeoplelist[i].occurrence + &quot;:&quot; + result.sortedpeoplelist[i].freq + &quot;\n&quot; ;
+			// }
+		 	// oReport += result.unipeople + &quot;/&quot; + result.totalfreq + &quot;/&quot; + result.totaloccurrence;
+		 }
+<span class="fc" id="L746">		 return oReport;</span>
+	 }
+ 
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
