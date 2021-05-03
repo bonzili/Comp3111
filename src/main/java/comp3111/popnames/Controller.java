@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.text.NumberFormat;
 import javax.swing.*;
+import java.text.NumberFormat;
 
 public class Controller {
 
@@ -279,17 +280,19 @@ public class Controller {
      */
     @FXML
     void doTask1() {
+    	NumberFormat format = NumberFormat.getPercentInstance();
+    	format.setMaximumFractionDigits(2);
     	String oReport = "";
     	final int topN = Integer.parseInt(T1_N.getText());;
     	int iYear = Integer.parseInt(T1_year.getText());
     	int totalM = Task1.totalM(iYear);
     	int totalF = Task1.totalF(iYear);
     	oReport += String.format("%s is the most popular name with the number of occurrences of ", AnalyzeNames.getName(iYear, 1, "M"));
-    	oReport += String.format("%d,which represents ", Task1.getNumforName(iYear, 1, "M"));
+    	oReport += String.format("%d,which represents %s ", Task1.getNumforName(iYear, 1, "M"),format.format(Double.valueOf(Double.valueOf(Task1.getNumforName(iYear,1,"M"))/totalM)));
     	/*percent*/
     	oReport += String.format("of total male births in %d. \n", iYear);
     	oReport += String.format("%s is the most popular name with the number of occurrences of ", AnalyzeNames.getName(iYear, 1, "F"));
-    	oReport += String.format("%d,which represents ", Task1.getNumforName(iYear, 1, "F"));
+    	oReport += String.format("%d,which represents %s ", Task1.getNumforName(iYear, 1, "F"),format.format(Double.valueOf(Double.valueOf(Task1.getNumforName(iYear,1,"F"))/totalF)));
     	/*percent*/
     	oReport += String.format("of total female births in %d. \n", iYear);
     	textAreaConsole.setText(oReport);

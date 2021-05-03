@@ -100,7 +100,7 @@ public class Task1 {
 		TableView<Person> table = new TableView();
 		Stage stage = new Stage();
 		Scene scene = new Scene(new Group());
-		stage.setWidth(300);
+		stage.setWidth(700);
         stage.setHeight(500);
         stage.setTitle("Table of Male");
         
@@ -130,8 +130,8 @@ public class Task1 {
         lastNameCol.setCellValueFactory(
                 new PropertyValueFactory<Person, String>("Occurrences"));
  
-        TableColumn emailCol = new TableColumn("Percentage");
-        emailCol.setMinWidth(100);
+        TableColumn emailCol = new TableColumn("Percentage in decimal");
+        emailCol.setMinWidth(200);
         emailCol.setCellValueFactory(
                 new PropertyValueFactory<Person, String>("Percentage"));
  
@@ -156,7 +156,7 @@ public class Task1 {
 		TableView<Person> table = new TableView();
 		Stage stage = new Stage();
 		Scene scene = new Scene(new Group());
-		stage.setWidth(300);
+		stage.setWidth(700);
         stage.setHeight(500);
         stage.setTitle("Table of Male");
         
@@ -186,8 +186,8 @@ public class Task1 {
         lastNameCol.setCellValueFactory(
                 new PropertyValueFactory<Person, String>("Occurrences"));
  
-        TableColumn emailCol = new TableColumn("Percentage");
-        emailCol.setMinWidth(100);
+        TableColumn emailCol = new TableColumn("Percentage in decimal");
+        emailCol.setMinWidth(200);
         emailCol.setCellValueFactory(
                 new PropertyValueFactory<Person, String>("Percentage"));
  
