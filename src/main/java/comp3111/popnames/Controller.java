@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import java.text.NumberFormat;
 import javax.swing.*;
 
 public class Controller {
@@ -39,12 +39,38 @@ public class Controller {
     @FXML
     private Button buttonSummary;
     
+    /*This is for task 1*/
     @FXML
     private Tab tabReport1;
 
     @FXML
-    private ToggleGroup T1;
-
+    private TextField T1_N;
+    
+    @FXML
+    private TextField T1_year;
+    
+    @FXML
+    private Button buttonSummaryT1;
+    
+    @FXML
+    private Button buttonTableMT1;
+    
+    @FXML
+    private Button buttonTableFT1;
+    
+    @FXML
+    private Button buttonbarMT1;
+    
+    @FXML
+    private Button buttonbarFT1;
+    
+    @FXML
+    private Button buttonpieMT1;
+    
+    @FXML
+    private Button buttonpieFT1;
+    /* task1 ends here */
+    
     @FXML
     private Tab tabReport2;
     
@@ -71,6 +97,21 @@ public class Controller {
 
     @FXML
     private Tab tabApp1;
+    
+    @FXML
+    private TextField dadName;
+    
+    @FXML
+    private TextField MomName;
+    
+    @FXML
+    private TextField dYob;
+    
+    @FXML
+    private TextField mYob;
+    
+    @FXML
+    private TextField algorithm;
 
     @FXML
     private Tab tabApp2;
@@ -231,8 +272,103 @@ public class Controller {
     		oReport += String.format("#%d: %s\n", i, AnalyzeNames.getName(iYear, i, "M"));
     	textAreaConsole.setText(oReport);
     }
-
-
+    /**
+     * Task1
+     *
+     * @author  Liuzijie
+     */
+    @FXML
+    void doTask1() {
+    	String oReport = "";
+    	final int topN = Integer.parseInt(T1_N.getText());;
+    	int iYear = Integer.parseInt(T1_year.getText());
+    	int totalM = Task1.totalM(iYear);
+    	int totalF = Task1.totalF(iYear);
+    	oReport += String.format("%s is the most popular name with the number of occurrences of ", AnalyzeNames.getName(iYear, 1, "M"));
+    	oReport += String.format("%d,which represents ", Task1.getNumforName(iYear, 1, "M"));
+    	/*percent*/
+    	oReport += String.format("of total male births in %d. \n", iYear);
+    	oReport += String.format("%s is the most popular name with the number of occurrences of ", AnalyzeNames.getName(iYear, 1, "F"));
+    	oReport += String.format("%d,which represents ", Task1.getNumforName(iYear, 1, "F"));
+    	/*percent*/
+    	oReport += String.format("of total female births in %d. \n", iYear);
+    	textAreaConsole.setText(oReport);
+    }
+    @FXML
+    void doTableT1M() {
+    	String oReport = "";
+    	final int topN = Integer.parseInt(T1_N.getText());;
+    	int iYear = Integer.parseInt(T1_year.getText());
+    	oReport += String.format("The table is shown in the prompt window");
+    	textAreaConsole.setText(oReport);
+    	Task1.TableT1M(iYear,topN,"M");
+    }
+    @FXML
+    void doTableT1F() {
+    	String oReport = "";
+    	final int topN = Integer.parseInt(T1_N.getText());;
+    	int iYear = Integer.parseInt(T1_year.getText());
+    	oReport += String.format("The table is shown in the prompt window");
+    	textAreaConsole.setText(oReport);
+    	Task1.TableT1F(iYear,topN,"F");
+    }
+    @FXML
+    void doBarT1M() {
+    	String oReport = "";
+    	final int topN = Integer.parseInt(T1_N.getText());;
+    	int iYear = Integer.parseInt(T1_year.getText());
+    	oReport += String.format("The bar chart is shown in the prompt window");
+    	textAreaConsole.setText(oReport);
+    	Task1.BarT1M(iYear,topN,"M");
+    }
+    
+    @FXML
+    void doBarT1F() {
+    	String oReport = "";
+    	final int topN = Integer.parseInt(T1_N.getText());;
+    	int iYear = Integer.parseInt(T1_year.getText());
+    	oReport += String.format("The bar chart is shown in the prompt window");
+    	textAreaConsole.setText(oReport);
+    	Task1.BarT1F(iYear,topN,"F");
+    }
+    
+    @FXML
+    void doPieT1M() {
+    	String oReport = "";
+    	final int topN = Integer.parseInt(T1_N.getText());;
+    	int iYear = Integer.parseInt(T1_year.getText());
+    	oReport += String.format("The Pie chart is shown in the prompt window");
+    	textAreaConsole.setText(oReport);
+    	Task1.PieT1(iYear,topN,"M");
+    }
+    
+    @FXML
+    void doPieT1F() {
+    	String oReport = "";
+    	final int topN = Integer.parseInt(T1_N.getText());
+    	int iYear = Integer.parseInt(T1_year.getText());
+    	oReport += String.format("The Pie chart is shown in the prompt window");
+    	textAreaConsole.setText(oReport);
+    	Task1.PieT1(iYear,topN,"F");
+    }
+    @FXML
+    void doApp1() {
+    	String oReport = "";
+    	final int dyob = Integer.parseInt(dYob.getText());
+    	final int myob = Integer.parseInt(mYob.getText());
+    	final String dadn = dadName.getText();
+    	final String momn = MomName.getText();
+    	final String alindex = algorithm.getText();
+        if (alindex == "T4X1") {
+        	oReport += String.format("If your baby is a boy, our recommend name is %s \n", AnalyzeNames.getName(dyob, 1, "M"));
+        	oReport += String.format("If your baby is a girl, our recommend name is %s \n", AnalyzeNames.getName(myob, 1, "F"));
+        }
+        else {
+        	oReport += String.format("If your baby is a boy, our recommend name is %s \n", AnalyzeNames.getName(myob, 1, "M"));
+        	oReport += String.format("If your baby is a girl, our recommend name is %s \n", AnalyzeNames.getName(dyob, 1, "F"));
+        }
+        textAreaConsole.setText(oReport);
+    }
 
     /**
      * Displaying the warning message if some input are found to be empty.

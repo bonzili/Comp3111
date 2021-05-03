@@ -49,12 +49,26 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab fx:id="tabReport1" text="Reporting 1">
+                 <Tab fx:id="tabReport1" text="Reporting 1">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="719.0">
                            <children>
-                              <Label layoutX="79.0" layoutY="44.0" />
-                              <TextArea layoutX="96.0" layoutY="24.0" prefHeight="99.0" prefWidth="398.0" text="Task #1: Most Popular Names (data reporting)&#10;&#10;Generate a report in response to the queries on the most popular names in a given year.&#10;" wrapText="true" />
+                              <Label layoutX="98.0" layoutY="35.0" prefHeight="18.0" prefWidth="87.0" text="Year of Interest" />
+                              <TextField fx:id="T1_year" layoutX="185.0" layoutY="32.0" text="2019" promptText="Range: 1880-2019"/>
+                              <Label layoutX="342.0" layoutY="35.0" text="Range: 1880 - 2019" />
+                              
+                              <Label layoutX="35.0" layoutY="67.0" prefHeight="18.0"  text="Number of popular names" />
+                              <TextField fx:id="T1_N" layoutX="185.0" layoutY="64.0" text="1" promptText="Range: 1-10"/>
+                              <Label layoutX="342.0" layoutY="67.0" text="Range: 1-10" />
+                              
+                              <TextArea layoutX="109.0" layoutY="100.0" prefHeight= "40.0" prefWidth="383.0" text="This function will generate a report in response to the queries on the most popular names in a given year. " wrapText="true"/>
+                              <Button fx:id="buttonSummaryT1" layoutX="220.0" layoutY="150.0" mnemonicParsing="false" onAction="#doTask1" text="Result(summary)" />
+                              <Button fx:id="buttonTableMT1" layoutX="50.0" layoutY="200.0" mnemonicParsing="false" onAction="#doTableT1M" text="Result(Table for Male)" />
+                              <Button fx:id="buttonTableFT1" layoutX="50.0" layoutY="250.0" mnemonicParsing="false" onAction="#doTableT1F" text="Result(Table for Female)" />
+                              <Button fx:id="buttonbarMT1" layoutX="220.0" layoutY="200.0" mnemonicParsing="false" onAction="#doBarT1M" text="Result(Bar chart for Male)" />
+                              <Button fx:id="buttonbarFT1" layoutX="220.0" layoutY="250.0" mnemonicParsing="false" onAction="#doBarT1F" text="Result(Bar chart for Female)" />
+                              <Button fx:id="buttonpieMT1" layoutX="390.0" layoutY="200.0" mnemonicParsing="false" onAction="#doPieT1M" text="Result(Pie chart for Male)" />
+                              <Button fx:id="buttonpieFT1" layoutX="390.0" layoutY="250.0" mnemonicParsing="false" onAction="#doPieT1F" text="Result(Pie chart for Female)" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -130,7 +144,25 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="719.0">
                            <children>
-                              <TextArea layoutX="40.0" layoutY="26.0" prefHeight="106.0" prefWidth="538.0" text="Task #4: Recommendation on Names for Newborn Babies (application)&#10;&#10;Develop and implement an online service using empirical data to help make informed decisions on naming their newborn babies.&#10;" wrapText="true" />
+                              <Label layoutX="102.0" layoutY="65.0" text="dadName" />
+                              <TextField fx:id="dadName" layoutX="189.0" layoutY="62.0" prefHeight="26.0" prefWidth="149.0" promptText="Tom" />
+
+                              <Label layoutX="102.0" layoutY="97.0" prefHeight="18.0" prefWidth="87.0" text="momName" />
+                              <TextField fx:id="MomName" layoutX="189.0" layoutY="94.0" prefHeight="26.0" prefWidth="149.0" promptText="Mary" />
+
+                              <Label layoutX="102.0" layoutY="128.0" text="dadYOB" />
+                              <TextField fx:id="dYob" layoutX="189.0" layoutY="125.0" promptText="Please input the rank" />
+                              <Label layoutX="346.0" layoutY="128.0" text="Range: 1880 - 2019" />
+                              
+                              <Label layoutX="102.0" layoutY="160.0" text="MomYOB" />
+                              <TextField fx:id="mYob" layoutX="189.0" layoutY="157.0" promptText="Please input the rank" />
+                              <Label layoutX="346.0" layoutY="160.0" text=" Range: 1880 - 2019 " />
+                              
+                              <Label layoutX="102.0" layoutY="192.0" text="algorithm" />
+                              <TextField fx:id="algorithm" layoutX="189.0" layoutY="190.0" promptText="T4X1" />
+                              <Label layoutX="346.0" layoutY="192.0" text=" T4X1 or T4X2 " />
+                              
+                              <Button fx:id="App1" layoutX="200.0" layoutY="230.0" mnemonicParsing="false" onAction="#doApp1" text="Execute" />
                            </children>
                         </AnchorPane>
                     </content>
